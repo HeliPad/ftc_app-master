@@ -69,13 +69,19 @@ public class DrivingMain extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-
+        boolean[] pressed = new boolean[1];
         // run until the end of the match (driver presses STOP)
         boolean omniMode = true;
         while (opModeIsActive()) {
             double rfPower = 0, rbPower = 0, lfPower = 0, lbPower = 0;
             double xl = gamepad1.left_stick_x, yl = gamepad1.left_stick_y;
             double xr = gamepad1.right_stick_x;
+            if (gamepad1.a && !pressed[0]) {
+                omniMode = !omniMode;
+                pressed[0] = true;
+            } else if (!gamepad1.a) {
+                pressed[2] = false;
+            }
 
             if (omniMode) {
                 rfPower = -xl + yl;
@@ -84,7 +90,20 @@ public class DrivingMain extends LinearOpMode {
                 lbPower = -xl + yl;
             }
             else {
-
+                if(Math.abs(xl) > Math.abs(yl)){
+                    yl=0;
+                    rfPower = -xl;
+                    rbPower = xl;
+                    lfPower = xl;
+                    lbPower = -xl;
+                }
+                else{
+                    xl=0;
+                    rfPower = yl;
+                    rbPower = yl;
+                    lfPower = yl;
+                    lbPower = yl;
+                }
             }
 
             rfPower -= xr;
