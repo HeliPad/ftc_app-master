@@ -90,7 +90,7 @@ public class DrivingMain extends LinearOpMode {
                 lbPower = -xl + yl;
             }
             else {
-                if(Math.abs(xl) > Math.abs(yl)){
+                if(Math.abs(xl) >= Math.abs(yl)){ //if the thumbstick is facing more horizontally than vertically
                     rfPower = -xl;
                     rbPower = xl;
                     lfPower = xl;
@@ -121,8 +121,6 @@ public class DrivingMain extends LinearOpMode {
             //robot.leftMotorB.setPower(lbPower);
 
             //THIS BETTER WORK
-            //PEEP
-            //game
         }
     }
 }
