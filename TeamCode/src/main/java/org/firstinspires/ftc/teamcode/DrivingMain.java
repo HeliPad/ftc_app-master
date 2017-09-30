@@ -53,7 +53,6 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="ControlOperation", group="Linear Opmode")
-@Disabled
 public class DrivingMain extends LinearOpMode {
 
     // Declare OpMode members.
@@ -62,27 +61,38 @@ public class DrivingMain extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        //robot.init(hardwareMap);
+        robot.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-        boolean[] pressed = new boolean[1];
-        // run until the end of the match (driver presses STOP)
+
+        boolean[] pressed = new boolean[2];
         boolean omniMode = true;
+
+        // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             double rfPower = 0, rbPower = 0, lfPower = 0, lbPower = 0;
             double xl = gamepad1.left_stick_x, yl = gamepad1.left_stick_y;
             double xr = gamepad1.right_stick_x;
+
+            //toggles driving mode
             if (gamepad1.a && !pressed[0]) {
                 omniMode = !omniMode;
                 pressed[0] = true;
             } else if (!gamepad1.a) {
                 pressed[0] = false;
             }
+            if (gamepad1.y && !pressed[0]) {
+                reOrient();
+                pressed[1] = true;
+            } else if (!gamepad1.y) {
+                pressed[1] = false;
+            }
 
+            //Calculates the power to give each motor for the two driving modes based on thumbstick position
             if (omniMode) {
                 rfPower = -xl + yl;
                 rbPower = xl + yl;
@@ -104,11 +114,13 @@ public class DrivingMain extends LinearOpMode {
                 }
             }
 
+            //Changes motors' power to account for turning
             rfPower -= xr;
             rbPower -= xr;
             lfPower += xr;
             lbPower += xr;
 
+            //Divides each motors' power by the highest power of the four motors to keep all powers within the setPower() method's parameters (-1<=power<=1)
             double max = Math.max(Math.max(Math.max(Math.abs(rfPower), Math.abs(rbPower)), Math.abs(lfPower)), Math.abs(lbPower));
             rfPower /= max;
             rbPower /= max;
@@ -122,5 +134,10 @@ public class DrivingMain extends LinearOpMode {
 
             //THIS BETTER WORK
         }
+    }
+
+    //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction)
+    public void reOrient(){
+
     }
 }

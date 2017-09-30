@@ -61,15 +61,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //@TeleOp(name="Chassis Test", group="Linear Opmode")  // @Autonomous(...) is the other common choice
 public class ChassisTest extends LinearOpMode {
 
-    Shooter shooter     = new Shooter();
+    //Shooter shooter     = new Shooter();
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
-    Hardware robot=new Hardware();
+    //Hardware robot=new Hardware();
     @Override
     public void runOpMode() throws InterruptedException {
-        robot.init(hardwareMap);//, getClass().getSimpleName());
-        shooter.init(robot, gamepad2);
+        //robot.init(hardwareMap);//, getClass().getSimpleName());
+        //shooter.init(robot, gamepad2);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -93,7 +93,7 @@ public class ChassisTest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            shooter.step();
+            //shooter.step();
 
            if (gamepad1.dpad_right && !pressed) {
                pressed = true;
@@ -130,12 +130,12 @@ public class ChassisTest extends LinearOpMode {
             //robot.bServo.setPosition(servPosition);//robot.bServo.setPosition(Math.abs(gamepad2.left_stick_y));
 
 
-
-           robot.leftMotorF.setPower(lsY+lsX); //-
+            /*robot.leftMotorF.setPower(lsY+lsX); //-
            robot.leftMotorB.setPower(lsY+lsX); //-
            robot.rightMotorF.setPower(lsY-lsX); //+
            robot.rightMotorB.setPower(lsY-lsX); //+
-//
+           */
+
             /*double pos = 0.68;
             if(gamepad2.a){
                 pos = robot.shootServo.getPosition();
@@ -186,12 +186,12 @@ public class ChassisTest extends LinearOpMode {
             }
 
             //telemetry.addData("Status", "Servo Pos: " + robot.shootServo.getPosition());
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Status", "Left motors: " + robot.leftMotorF.getPower());
-            telemetry.addData("Status", "Right motors: " + robot.rightMotorF.getPower());
-           //telemetry.addData("Status", "Gamepad Y position: " + gamepad1.left_stick_y);
-           //telemetry.addData("Status", "Gamepad X position: " + gamepad1.left_stick_x);
-           telemetry.addData("Status", "Movement Modifier: " + MODIFY);
+            ///telemetry.addData("Status", "Run Time: " + runtime.toString());
+            //telemetry.addData("Status", "Left motors: " + robot.leftMotorF.getPower());
+            //telemetry.addData("Status", "Right motors: " + robot.rightMotorF.getPower());
+           telemetry.addData("Status", "Gamepad Y position: " + gamepad1.left_stick_y);
+           telemetry.addData("Status", "Gamepad X position: " + gamepad1.left_stick_x);
+           //telemetry.addData("Status", "Movement Modifier: " + MODIFY);
 
 
             telemetry.update();
@@ -201,7 +201,7 @@ public class ChassisTest extends LinearOpMode {
 
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
-        shooter.setInverse(false);
+        //shooter.setInverse(false);
     }
     /*
     Left Motor Controller ID: AL00VWI4
