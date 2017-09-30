@@ -85,6 +85,7 @@ public class DrivingMain extends LinearOpMode {
             } else if (!gamepad1.a) {
                 pressed[0] = false;
             }
+            //Reorients Robot (see reOrient() for more info.)
             if (gamepad1.y && !pressed[0]) {
                 reOrient();
                 pressed[1] = true;
@@ -136,7 +137,7 @@ public class DrivingMain extends LinearOpMode {
         }
     }
 
-    //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction)
+    //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
     public void reOrient(){
 
     }
