@@ -80,7 +80,7 @@ public class DrivingMain extends LinearOpMode {
                 omniMode = !omniMode;
                 pressed[0] = true;
             } else if (!gamepad1.a) {
-                pressed[2] = false;
+                pressed[0] = false;
             }
 
             if (omniMode) {
@@ -91,14 +91,12 @@ public class DrivingMain extends LinearOpMode {
             }
             else {
                 if(Math.abs(xl) > Math.abs(yl)){
-                    yl=0;
                     rfPower = -xl;
                     rbPower = xl;
                     lfPower = xl;
                     lbPower = -xl;
                 }
                 else{
-                    xl=0;
                     rfPower = yl;
                     rbPower = yl;
                     lfPower = yl;
