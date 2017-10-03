@@ -143,3 +143,11 @@ public class DrivingMain extends LinearOpMode {
     }
 }
 //https://gist.github.com/jboulhous/6007980
+
+/*
+git add .
+git commit -m "[Insert Commit Here]"
+
+git push -u origin master
+
+*/
