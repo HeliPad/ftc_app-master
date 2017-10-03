@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 /**
- * Created by Luxon on 9/19/2017.
+ * Created by Luxon on 10/03/2017.
  */
 /* Copyright (c) 2017 FIRST. All rights reserved.
  *
@@ -32,12 +32,9 @@ package org.firstinspires.ftc.teamcode;
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -52,8 +49,8 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="ControlOperation", group="Linear Opmode")
-public class DrivingMain extends LinearOpMode {
+@Autonomous(name="Autonomous", group="Automus")
+public class Autonomous extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -69,72 +66,12 @@ public class DrivingMain extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        boolean[] pressed = new boolean[2];
-        boolean omniMode = true;
-
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            double rfPower = 0, rbPower = 0, lfPower = 0, lbPower = 0;
-            double xl = gamepad1.left_stick_x, yl = gamepad1.left_stick_y;
-            double xr = gamepad1.right_stick_x;
-
-            //toggles driving mode
-            if (gamepad1.a && !pressed[0]) {
-                omniMode = !omniMode;
-                pressed[0] = true;
-            } else if (!gamepad1.a) {
-                pressed[0] = false;
-            }
-            //Reorients Robot (see reOrient() for more info.)
-            if (gamepad1.y && !pressed[1]) {
-                reOrient();
-                pressed[1] = true;
-            } else if (!gamepad1.y) {
-                pressed[1] = false;
-            }
-
-            //Calculates the power to give each motor for the two driving modes based on thumbstick position
-            if (omniMode) {
-                rfPower = -xl + yl;
-                rbPower = xl + yl;
-                lfPower = xl + yl;
-                lbPower = -xl + yl;
-            }
-            else {
-                if(Math.abs(xl) >= Math.abs(yl)){ //if the thumbstick is facing more horizontally than vertically
-                    rfPower = -xl;
-                    rbPower = xl;
-                    lfPower = xl;
-                    lbPower = -xl;
-                }
-                else{
-                    rfPower = yl;
-                    rbPower = yl;
-                    lfPower = yl;
-                    lbPower = yl;
-                }
-            }
-
-            //Changes motors' power to account for turning
-            rfPower -= xr;
-            rbPower -= xr;
-            lfPower += xr;
-            lbPower += xr;
-
-            //Divides each motors' power by the highest power of the four motors to keep all powers within the setPower() method's parameters (-1<=power<=1)
-            double max = Math.max(Math.max(Math.max(Math.abs(rfPower), Math.abs(rbPower)), Math.abs(lfPower)), Math.abs(lbPower));
-            rfPower /= max;
-            rbPower /= max;
-            lfPower /= max;
-            lbPower /= max;
-
-            robot.rightMotorF.setPower(rfPower);
-            robot.rightMotorB.setPower(rbPower);
-            robot.leftMotorF.setPower(lfPower);
-            robot.leftMotorB.setPower(lbPower);
+            
+            
             
             idle();
-            //THIS BETTER WORK
         }
     }
 
