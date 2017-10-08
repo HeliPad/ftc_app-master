@@ -153,7 +153,7 @@ public class DrivingMain extends LinearOpMode {
                 robot.leftMotorF.setPower(-.5);
                 robot.leftMotorB.setPower(-.5);
         }
-        else{
+        else if(curHeading > targetHeading){
                 robot.rightMotorB.setPower(-.5); //test and set to power that'll ensure greatest accuracy:speed ratio
                 robot.rightMotorF.setPower(-.5);
                 robot.leftMotorF.setPower(.5);
