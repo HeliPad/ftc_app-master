@@ -160,7 +160,7 @@ public class DrivingMain extends LinearOpMode {
                 robot.leftMotorB.setPower(.5);
         }
         //when the loop breaks, the robot is at the targetHeading
-        while ((int)gyro.getHeading() != targetHeading)
+        while (gyro.getHeading() != targetHeading)
         {
             telemetry.addData("Status", "Reorienting... Please Wait...");
             telemetry.update();

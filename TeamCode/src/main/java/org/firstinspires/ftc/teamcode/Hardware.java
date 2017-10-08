@@ -29,6 +29,9 @@ public class Hardware
     public DcMotor rightMotorF = null;
     public DcMotor leftMotorB = null;
     public DcMotor rightMotorB = null;
+    public ColorSensor color = null;
+    public ModernRoboticsI2cRangeSensor range = null;
+    public ModernRoboticsI2cGyro gyro = null;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -54,6 +57,9 @@ public class Hardware
             transInit();
         }
         */
+        color = hwMap.get(ColorSensor.class, "color_sensor");
+        range = hwMap.get(ModernRoboticsI2cRangeSensor.class, "range_sensor");
+        gyro = hwMap.get(ModernRoboticsI2cGyro.class, "gyro");
         mobInit();
     }
     //ShootInit Initializes the Shooting mechanism.
