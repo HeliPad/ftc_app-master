@@ -125,7 +125,7 @@ public class Auto extends LinearOpMode {
         while (opModeIsActive() && vuMark == RelicRecoveryVuMark.UNKNOWN) { // for finding starting image
             vuMark = RelicRecoveryVuMark.from(relicTemplate); // will be an Enum like RelicRecoveryVuMark.UNKNOWN or RelicRecoveryVuMark.CENTER
         }
-        telemetry.addData("Status", "Found image! Key is the" + vuMark.toString() + "!");
+        telemetry.addData("Status", "Found image! Key is the " + vuMark.toString() + "!");
         telemetry.update();
         
         //Sets color sensor to active mode (for reading objects that aren't light sources) 
