@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import java.util.Math.*
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -58,6 +59,10 @@ public class DrivingMain extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     Hardware robot=new Hardware();
+    
+    public int mod(num, div) {
+        return num - (int)((float)num/div)
+    }
 
     @Override
     public void runOpMode() {
@@ -70,7 +75,11 @@ public class DrivingMain extends LinearOpMode {
         runtime.reset();
         
         //Zero the heading
+        telemetry.addData("Status", "Calibrating the Gyro, Don't Move...");
+        telemetery.update();
         robot.gyro.calibrate();
+        telemetry.addData("Status", "Calibration Finished!");
+        telemetry.update();
 
         boolean[] pressed = new boolean[2];
         boolean omniMode = true;
@@ -146,8 +155,8 @@ public class DrivingMain extends LinearOpMode {
         //target heading is from 1-4 (90,180,270,360)
         int targetHeading = (int)(curHeading/90 + 0.5);
         
-        //Turns robot towards Target Heading
-        if(curHeading < (targetHeading == 0 ? 360 : targetHeading)){
+        //Turns robot towards Target Heading (added last part just in case Cur==Target @ 0)
+        if(curHeading < (targetHeading == 0 ? 360 : targetHeading && curHeading != targetHeading)){
                 robot.rightMotorB.setPower(.5); //test and set to power that'll ensure greatest accuracy:speed ratio
                 robot.rightMotorF.setPower(.5);
                 robot.leftMotorF.setPower(-.5);

@@ -51,7 +51,23 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="Autonomous", group="Automus")
 public class Autonomous extends LinearOpMode {
-
+    /**
+     * Steps for Autonomous:
+     * 1. Extend Bar
+     * 2. Use Color Sensor to Detect Jewel Color
+     * 3. Hit Opposing Alliance Jewel w/ Bar
+     * 4. Detract Bar
+     * 5. Read Image w/ Vuforia and store the Key slot (1-3) in var. 
+     * 6. Go off platform towards shelves
+     * 7. Reorient Robot (reorient to 90/270 degrees if on platforms furthest from glpyh placement area)
+     * Loop:
+     *     8. Move across shelf slowly w/ Range Sensor
+     *     9. Use counter var. to count how many times the Range Sensor reading suddenly dipped (shelf edges)
+     *        and compare the var. to the key slot value
+     * 10. Reorient robot after it finds the correct slot
+     * 11. Park in parking zone by moving back (or forwards) to the 2nd slot (^similar loop)
+     **/
+     
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     Hardware robot=new Hardware();
@@ -60,7 +76,12 @@ public class Autonomous extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
+        telemetry.addData("Status", "Calibrating the Gyro..."");
         telemetry.update();
+        robot.gyro.calibrate();
+        telemetry.addData("Status", "Calibration Finished!");
+        telemetry.update();
+        
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -77,7 +98,36 @@ public class Autonomous extends LinearOpMode {
 
     //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
     public void reOrient(){
+        float curHeading = (float)robot.gyro.getHeading();
+        int targetHeading = 0; //Might change if block holder is on back of robot
         
+        //Turns robot towards Target Heading
+        if(curHeading!=targetHeading){
+            if(curHeading > 180)){
+                    robot.rightMotorB.setPower(.5); //test and set to power that'll ensure greatest accuracy:speed ratio
+                    robot.rightMotorF.setPower(.5);
+                    robot.leftMotorF.setPower(-.5);
+                    robot.leftMotorB.setPower(-.5);
+            }
+            else
+                    robot.rightMotorB.setPower(-.5); //test and set to power that'll ensure greatest accuracy:speed ratio
+                    robot.rightMotorF.setPower(-.5);
+                    robot.leftMotorF.setPower(.5);
+                    robot.leftMotorB.setPower(.5);
+            }
+        }
+        //when the loop breaks, the robot is at the targetHeading
+        while (robot.gyro.getHeading() != targetHeading)
+        {
+            telemetry.addData("Status", "Reorienting... Please Wait...");
+            telemetry.update();
+        }
+        robot.rightMotorB.setPower(0);   //get on the group chat :P (under the collaborate tab (top right))
+        robot.rightMotorF.setPower(0);
+        robot.leftMotorF.setPower(0);
+        robot.leftMotorB.setPower(0);
+        telemetry.addData("Status","Done!");
+        telemetry.update();
     }
 }
 //https://gist.github.com/jboulhous/6007980
