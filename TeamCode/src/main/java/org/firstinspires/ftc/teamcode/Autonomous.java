@@ -57,13 +57,13 @@ public class Autonomous extends LinearOpMode {
      * 2. Use Color Sensor to Detect Jewel Color
      * 3. Hit Opposing Alliance Jewel w/ Bar
      * 4. Detract Bar
-     * 5. Read Image w/ Vuforia and store the Key slot (1-3) in var. 
+     * 5. Read Image w/ Vuforia (Done!) 
      * 6. Go off platform towards shelves
      * 7. Reorient Robot (reorient to 90/270 degrees if on platforms furthest from glpyh placement area)
      * Loop:
      *     8. Move across shelf slowly w/ Range Sensor
-     *     9. Use counter var. to count how many times the Range Sensor reading suddenly dipped (shelf edges)
-     *        and compare the var. to the key slot value
+     *     9. Use counter var. to count how many times the Range Sensor reading suddenly dipped
+     *     (shelf edges - 3.93" inches (approx 9.98 cm.) deep) and compare the var. to the key slot value
      * 10. Reorient robot after it finds the correct slot
      * 11. Park in parking zone by moving back (or forwards) to the 2nd slot (^similar loop)
      **/
@@ -71,14 +71,35 @@ public class Autonomous extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     Hardware robot=new Hardware();
+    
+    private VuforiaLocalizer vuforia;
 
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
+        
+        int cameraMonitorViewId = robot.hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", robot.hwMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        
+        parameters.vuforiaLicenseKey = "AQciC17/////AAAAGcHm/ae3S08LoppTUUYYhUt7QoRjsJ4DoYOBzI9Dm8tvE3Q/J" +
+            "tmd61aFoXpPo27FDqgLMGRfL50nNxwiyLGgilckQSUmvdaOM5u+66J6rNQk3KTkQb+BsajnaJ8ekm525CPOEoTGK0" +
+            "QLsuHPISeLIUUPdegnqhtyEZCQZE5bcvDQfv6aT0BvDZGpm09qhQmFWpmZrU1nNaLwCOELCD8g/Q9s2TfBi2BZtkC" +
+            "5S/CeKmzfrzed7RWQo0showZqx4bEQZLMgYUedAxvjaF8mknAuP1oMGb0udO/b0w6oLUHiGzXTaaf+q7zcTh8SXPLsIp" +
+            "Pu4av6gGiENWcUz7hczRQEMi3ZqJIyjbLCyV7psrGovSp";    
+    
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+        
+        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
+        VuforiaTrackable relicTemplate = relicTrackables.get(0);
+     
         telemetry.addData("Status", "Initialized");
+        
         telemetry.addData("Status", "Calibrating the Gyro..."");
         telemetry.update();
+        
         robot.gyro.calibrate();
+        
         telemetry.addData("Status", "Calibration Finished!");
         telemetry.update();
         
@@ -86,10 +107,17 @@ public class Autonomous extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
+        relicTrackables.activate();
 
+        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+        while (opModeIsActive() && vuMark == RelicRecoveryVuMark.UNKNOWN) { // for finding starting image
+            vuMark = RelicRecoveryVuMark.from(relicTemplate); // will be an Enum like RelicRecoveryVuMark.UNKNOWN or RelicRecoveryVuMark.CENTER
+        }
+         
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            
+            //Extend Bar
+            //Color Sensor stuff:
             
             
             idle();
@@ -99,7 +127,7 @@ public class Autonomous extends LinearOpMode {
     //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
     public void reOrient(){
         float curHeading = (float)robot.gyro.getHeading();
-        int targetHeading = 0; //Might change if block holder is on back of robot
+        int targetHeading = 0;
         
         //Turns robot towards Target Heading
         if(curHeading!=targetHeading){
@@ -122,7 +150,7 @@ public class Autonomous extends LinearOpMode {
             telemetry.addData("Status", "Reorienting... Please Wait...");
             telemetry.update();
         }
-        robot.rightMotorB.setPower(0);   //get on the group chat :P (under the collaborate tab (top right))
+        robot.rightMotorB.setPower(0);
         robot.rightMotorF.setPower(0);
         robot.leftMotorF.setPower(0);
         robot.leftMotorB.setPower(0);

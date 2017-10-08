@@ -32,7 +32,7 @@ package org.firstinspires.ftc.teamcode;
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.util.Math.*
+import java.util.Math.*;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -60,8 +60,9 @@ public class DrivingMain extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     Hardware robot=new Hardware();
     
-    public int mod(num, div) {
-        return num - (int)((float)num/div)
+    //Ex Output: mod(-9,4) -> 3
+    public int mod(int num, int div) {
+        return num - (int)Math.floor((float)num/div)*div;
     }
 
     @Override
@@ -156,13 +157,13 @@ public class DrivingMain extends LinearOpMode {
         int targetHeading = (int)(curHeading/90 + 0.5);
         
         //Turns robot towards Target Heading (added last part just in case Cur==Target @ 0)
-        if(curHeading < (targetHeading == 0 ? 360 : targetHeading && curHeading != targetHeading)){
+        if ((mod(targetHeading - curHeading + 180, 360) - 180) < 0) {//if(curHeading < (targetHeading == 0 ? 360 : targetHeading && curHeading != targetHeading)){ this will not always take the shortest route to the target
                 robot.rightMotorB.setPower(.5); //test and set to power that'll ensure greatest accuracy:speed ratio
                 robot.rightMotorF.setPower(.5);
                 robot.leftMotorF.setPower(-.5);
                 robot.leftMotorB.setPower(-.5);
         }
-        else if(curHeading > targetHeading){
+        else if(curHeading != targetHeading) {//else if(curHeading > targetHeading){
                 robot.rightMotorB.setPower(-.5); //test and set to power that'll ensure greatest accuracy:speed ratio
                 robot.rightMotorF.setPower(-.5);
                 robot.leftMotorF.setPower(.5);
