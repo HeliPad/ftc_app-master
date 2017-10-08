@@ -56,8 +56,8 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Autonomous", group="Automus")
-public class Autonomous extends LinearOpMode {
+@Autonomous(name="Auto", group="Automus")
+public class Auto extends LinearOpMode {
     /**
      * Steps for Autonomous:
      * 1. Extend Bar
@@ -110,6 +110,10 @@ public class Autonomous extends LinearOpMode {
         telemetry.addData("Status", "Calibration Finished!");
         telemetry.update();
         
+        //For color sensor
+        int red;
+        int blue;
+        boolean fin= false;
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -117,18 +121,35 @@ public class Autonomous extends LinearOpMode {
         relicTrackables.activate();
 
         RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+        
         while (opModeIsActive() && vuMark == RelicRecoveryVuMark.UNKNOWN) { // for finding starting image
             vuMark = RelicRecoveryVuMark.from(relicTemplate); // will be an Enum like RelicRecoveryVuMark.UNKNOWN or RelicRecoveryVuMark.CENTER
         }
-         
+        telemetry.addData("Status", "Found image! Key is the" + vuMark.toString() + "!");
+        telemetry.update();
+        
+        //Sets color sensor to active mode (for reading objects that aren't light sources) 
+            robot.color.enableLed(true); 
+            
         // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
-            //Extend Bar
+        while (opModeIsActive() && !fin) {
+            //Extend Bar (might need encoders)
             //Color Sensor stuff:
             
-            
-            idle();
+            //Get the red and blue values from RGB
+            red=robot.color.red();
+            blue=robot.color.blue();
+            if(red>blue /* &&  motor power == 0 <-- Bar fully extended */){
+                //hit ball based on alliance
+                fin=!fin;
+            }
+            else if(blue>red /* && motor power == 0 <-- Bar fully extended*/){
+                //hit ball based on alliance
+                fin=!fin;
+            }
         }
+        //Retract bar (when motor has turned a certain distance, start driving off platform)
+        
     }
 
     //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
