@@ -51,7 +51,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 //fall back Autonomous Program
 
-@Autonomous(name="Move Straight", group="AutoTesting")  // @Autonomous(...) is the other common choice
+//@Autonomous(name="Move Straight", group="AutoTesting")  // @Autonomous(...) is the other common choice
 public class Move_Straight extends LinearOpMode {
 
     /* Declare OpMode members. */

@@ -84,7 +84,7 @@ import java.util.List;
  * is explained below.
  */
 
-@Autonomous(name="Vuforia Nav", group ="Concept")
+//@Autonomous(name="Vuforia Nav", group ="Concept")
 public class VuforiaNav extends LinearOpMode {
 
     public static final String TAG = "Target Found!";

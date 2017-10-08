@@ -58,7 +58,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 
-//@TeleOp(name="Chassis Test", group="Linear Opmode")  // @Autonomous(...) is the other common choice
+@TeleOp(name="Chassis Test", group="Linear Opmode")  // @Autonomous(...) is the other common choice
 public class ChassisTest extends LinearOpMode {
 
     //Shooter shooter     = new Shooter();

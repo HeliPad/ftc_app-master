@@ -88,7 +88,7 @@ public class DrivingMain extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             double rfPower = 0, rbPower = 0, lfPower = 0, lbPower = 0;
-            double xl = gamepad1.left_stick_x, yl = gamepad1.left_stick_y;
+            double xl = gamepad1.left_stick_x, yl = -gamepad1.left_stick_y; //moving thumbstick up results in -y value
             double xr = gamepad1.right_stick_x;
 
             //toggles driving mode

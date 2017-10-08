@@ -19,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 /*
 Created by naap in 10/25/16
 */
-@Autonomous(name = "Vuforia")
+//@Autonomous(name = "Vuforia")
 public class VuforiaOpMode extends LinearOpMode
 {
     // Variables to be used for later
