@@ -35,6 +35,13 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -95,7 +102,7 @@ public class Autonomous extends LinearOpMode {
      
         telemetry.addData("Status", "Initialized");
         
-        telemetry.addData("Status", "Calibrating the Gyro..."");
+        telemetry.addData("Status", "Calibrating the Gyro...");
         telemetry.update();
         
         robot.gyro.calibrate();
@@ -131,13 +138,13 @@ public class Autonomous extends LinearOpMode {
         
         //Turns robot towards Target Heading
         if(curHeading!=targetHeading){
-            if(curHeading > 180)){
+            if(curHeading > 180){
                     robot.rightMotorB.setPower(.5); //test and set to power that'll ensure greatest accuracy:speed ratio
                     robot.rightMotorF.setPower(.5);
                     robot.leftMotorF.setPower(-.5);
                     robot.leftMotorB.setPower(-.5);
             }
-            else
+            else{
                     robot.rightMotorB.setPower(-.5); //test and set to power that'll ensure greatest accuracy:speed ratio
                     robot.rightMotorF.setPower(-.5);
                     robot.leftMotorF.setPower(.5);

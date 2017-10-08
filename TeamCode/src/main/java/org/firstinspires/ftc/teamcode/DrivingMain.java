@@ -77,7 +77,7 @@ public class DrivingMain extends LinearOpMode {
         
         //Zero the heading
         telemetry.addData("Status", "Calibrating the Gyro, Don't Move...");
-        telemetery.update();
+        telemetry.update();
         robot.gyro.calibrate();
         telemetry.addData("Status", "Calibration Finished!");
         telemetry.update();
@@ -158,7 +158,7 @@ public class DrivingMain extends LinearOpMode {
         
         //Turns robot towards Target Heading (added last part just in case Cur==Target @ 0)
         //Multiplied target heading by 90 to allow all cases to work (if curHeading>targetHeading && targetHeading!=0. then the robot would've moved CCW)
-        if ((mod(targetHeading - curHeading + 180, 360) - 180) < 0) {//if(curHeading < (targetHeading == 0 ? 360 : targetHeading && curHeading != targetHeading)){ this will not always take the shortest route to the target
+        if ((mod(targetHeading - (int)curHeading + 180, 360) - 180) < 0) {//if(curHeading < (targetHeading == 0 ? 360 : targetHeading && curHeading != targetHeading)){ this will not always take the shortest route to the target
                 robot.rightMotorB.setPower(.5); //test and set to power that'll ensure greatest accuracy:speed ratio
                 robot.rightMotorF.setPower(.5);
                 robot.leftMotorF.setPower(-.5);
