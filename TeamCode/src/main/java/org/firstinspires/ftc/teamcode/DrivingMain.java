@@ -135,11 +135,22 @@ public class DrivingMain extends LinearOpMode {
             lbPower += xr;
 
             //Divides each motors' power by the highest power of the four motors to keep all powers within the setPower() method's parameters (-1<=power<=1)
-            double max = Math.max(Math.max(Math.max(Math.abs(rfPower), Math.abs(rbPower)), Math.abs(lfPower)), Math.abs(lbPower));
-            rfPower /= max;
-            rbPower /= max;
-            lfPower /= max;
-            lbPower /= max;
+            // In turn though, it makes the power less variable (moved the thumbstick only a little bit up, instantly changed all motor powers to 1) <---Fixed
+            if(Math.abs(rfPower)>1 || Math.abs(rbPower)>1 || Math.abs(lfPower)>1 || Math.abs(lbPower)>1) {
+                double max = Math.max(Math.max(Math.max(Math.abs(rfPower), Math.abs(rbPower)), Math.abs(lfPower)), Math.abs(lbPower));
+                rfPower /= max;
+                rbPower /= max;
+                lfPower /= max;
+                lbPower /= max;
+            }
+            
+            //For testing (looks fine)
+            telemetry.addData("Status", "Right F Motor: " + rfPower);
+            telemetry.addData("Status", "Right B Motor: " + rbPower);
+            telemetry.addData("Status", "Left F Motor: " + lfPower);
+            telemetry.addData("Status", "Left B Motor: " + lbPower);
+            telemetry.addData("Status", "OmniMode: " + (omniMode ? "On" : "Off"));
+            telemetry.update();
 
             robot.rightMotorF.setPower(rfPower);
             robot.rightMotorB.setPower(rbPower);
