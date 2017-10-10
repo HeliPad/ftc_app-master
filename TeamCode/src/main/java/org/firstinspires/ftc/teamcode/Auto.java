@@ -42,6 +42,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -113,7 +114,6 @@ public class Auto extends LinearOpMode {
         //For color sensor
         int red;
         int blue;
-        boolean fin= false;
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -129,26 +129,35 @@ public class Auto extends LinearOpMode {
         telemetry.update();
         
         //Sets color sensor to active mode (for reading objects that aren't light sources) 
-            robot.color.enableLed(true); 
+        robot.color.enableLed(true); 
             
         // run until the end of the match (driver presses STOP)
-        while (opModeIsActive() && !fin) {
-            //Extend Bar (might need encoders)
-            //Color Sensor stuff:
+       
+        //Extend Bar (might need encoders)
+        while(opModeIsActive() /*&& motor distance < #*/){
+            //turn on motor that extends bar
+        }
+        //turn off motor that extends bar
             
-            //Get the red and blue values from RGB
-            red=robot.color.red();
-            blue=robot.color.blue();
-            if(red>blue /* &&  motor power == 0 <-- Bar fully extended */){
-                //hit ball based on alliance
-                fin=!fin;
-            }
-            else if(blue>red /* && motor power == 0 <-- Bar fully extended*/){
-                //hit ball based on alliance
-                fin=!fin;
-            }
+        sleep(200); //Gives motor time to stop
+            
+        //Color Sensor stuff:
+        //Get the red and blue values from RGB
+        red=robot.color.red();
+        blue=robot.color.blue();
+        if(red>blue){
+            //hit ball based on alliance
+        }
+        else if(blue>red){
+            //hit ball based on alliance
         }
         //Retract bar (when motor has turned a certain distance, start driving off platform)
+        while(opModeIsActive() /*&& motor distance < #*/){
+            //turn on motor that extends bar
+        }
+        //turn off motor
+        //drive off platform (z changes on gyro)
+        
         
     }
 
