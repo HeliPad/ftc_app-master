@@ -60,9 +60,12 @@ public class DrivingMain extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     Hardware robot=new Hardware();
     
-    //Ex Output: mod(-9,4) -> 3
     public int mod(int num, int div) {
         return num - (int)Math.floor((float)num/div)*div;
+    }
+    
+    public int angleDifference(int a1, int a2){
+        return mod(a1 - a2 + 180, 360) - 180;
     }
 
     @Override
@@ -163,13 +166,13 @@ public class DrivingMain extends LinearOpMode {
 
     //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
     public void reOrient() {
-        float curHeading = (float)robot.gyro.getHeading();
+        int curHeading = robot.gyro.getHeading();
         //target heading is from 0-360 (0,90,180,270,360)
-        int targetHeading = (int)(curHeading/90 + 0.5) * 90;
+        int targetHeading = (int)(curHeading/90.0 + 0.5) * 90;
         
         //Turns robot towards Target Heading (added last part just in case Cur==Target @ 0)
         //Multiplied target heading by 90 to allow all cases to work (if curHeading>targetHeading && targetHeading==1, then the robot would've moved CCW)
-        if ((mod(targetHeading - (int)curHeading + 180, 360) - 180) < 0) {//if(curHeading < (targetHeading == 0 ? 360 : targetHeading && curHeading != targetHeading)){ this will not always take the shortest route to the target
+        if (angleDifference(targetHeading, curHeading) < 0) {//if(curHeading < (targetHeading == 0 ? 360 : targetHeading && curHeading != targetHeading)){ this will not always take the shortest route to the target
                 robot.rightMotorB.setPower(.5); //test and set to power that'll ensure greatest accuracy:speed ratio
                 robot.rightMotorF.setPower(.5);
                 robot.leftMotorF.setPower(-.5);

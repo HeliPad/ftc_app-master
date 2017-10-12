@@ -85,6 +85,14 @@ public class Auto extends LinearOpMode {
     Hardware robot=new Hardware();
     
     private VuforiaLocalizer vuforia;
+    
+    public int mod(int num, int div) {
+        return num - (int)Math.floor((float)num/div)*div;
+    }
+    
+    public int angleDifference(int a1, int a2){
+        return mod(a1 - a2 + 180, 360) - 180;
+    }
 
     @Override
     public void runOpMode() {
@@ -128,6 +136,7 @@ public class Auto extends LinearOpMode {
         
         while (opModeIsActive() && vuMark == RelicRecoveryVuMark.UNKNOWN) { // for finding starting image
             vuMark = RelicRecoveryVuMark.from(relicTemplate); // will be an Enum like RelicRecoveryVuMark.UNKNOWN or RelicRecoveryVuMark.CENTER
+            idle();
         }
         telemetry.addData("Status", "Found image! Key is the " + vuMark + "!");
         telemetry.update();
@@ -140,6 +149,7 @@ public class Auto extends LinearOpMode {
         //Extend Bar (might need encoders)
         while(opModeIsActive() /*&& motor distance < #*/){
             //turn on motor that extends bar
+            idle();
         }
         //turn off motor that extends bar
             
@@ -158,19 +168,21 @@ public class Auto extends LinearOpMode {
         //Retract bar (when motor has turned a certain distance, start driving off platform)
         while(opModeIsActive() /*&& motor distance < #*/){
             //turn on motor that controls bar
+            idle();
         }
         //turn off motor
         //drive off platform (Can use gyro's X or Y angular velocity to know how far to go) <-- when angular velocity == 0, stop motors
-        setMotorP(.1, -.1,-.1,.1);
+        setMotorP(.1, -.1, -.1, .1);
         
         sleep(500); //gives robot time to change its X/Y angular velocity (already at 0)
         float xAngle=robot.gyro.rawX(); 
         while(opModeIsActive && Math.abs(xAngle) > 1.0){
             xAngle=robot.gyro.rawX();
+            idle();
         }
         setMotorP(0,0,0,0);
         //Reorient robot so it's facing the wall
-        reOrient();
+        reOrient(.5, 0, 0, 0, 0);
         //Back up a little (when we get off the balance oard, we're too close to the wall)
         
         //Translate to Right or Left while doing range sensor stuff (Left for this code)
@@ -182,15 +194,19 @@ public class Auto extends LinearOpMode {
         int c=0;
         while(opModeIsActive()){
             curDistance= robot.range.getDistance(DistanceUnit.CM);
+            //Reorient code goes here:
+            curHeading = robot.gyro.getHeading();
+            
+            if (Math.abs(angleDifference(0, curHeading)) > 0) {
+                reOrient(.05, .1, -.1, -.1, .1);
+            }
+            
             if(curDistance<prevDistance - 7){
                 c++;
             }
             if(c==1 && vuMark.toString().equals("RIGHT")){
                 setMotorP(0,0,0,0);
-                //Reorient robot towards shelves if off (might have to do this while moving instead)
-                reOrient();
-                //after reorienting, we might have to do some minor adjustments if the robot was actually off
-                
+               
                 //Plack blocku
                 
                 break;
@@ -203,43 +219,57 @@ public class Auto extends LinearOpMode {
             }
             else if(c==3 && vuMark.toString().equals("LEFT")){
                 setMotorP(0,0,0,0);
-                //Reorient robot towards shelves if off (might have to do this while moving instead)
-                reOrient();
-                //after reorienting, we might have to do some minor adjustments if the robot was actually off
-                
+               
                 //Place blocku
                 
                 break;
             }
             prevDistance = curDistance;
+            idle();
         }
         //Move to 2nd slot and park
         int prevDistance = robot.range.getDistance(DistanceUnit.CM);
         int curDistance;
         int c=0;
-        while(opModeIsActive()) {
+        while(opModeIsActive() && !vuMark.toString().equals("CENTER")) {
             curDistance = robot.range.getDistance(DistanceUnit.CM);
-            if(vuMark.toString().equals("LEFT")){
-                setMotorP(-.1,.1,.1,-.1);
-                
+            if(curDistance<prevDistance - 7){
+                c++;
             }
+            if(vuMark.toString().equals("LEFT")){
+                setMotorP(-.1, .1, .1, -.1);
+                if(c==2){
+                    setMotorP(0, 0, 0, 0);
+                    break;
+                }
+            }
+            else if(vuMark.toString().equals("RIGHT")){
+                setMotorP(.1, -.1, -.1, .1);
+                if(c==1){
+                    setMotorP(0, 0, 0, 0);
+                    break;
+                }
+            }
+            prevDistance = curDistance;
+            idle();
         }
-        
+        telemetry.addData("Status", "Finished!");
+        telemetry.update();
     }
 
     //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
-    public void reOrient(){
+    public void reOrient(float power, float rf, float rb, float lf, float lb){
         float curHeading = (float)robot.gyro.getHeading();
         int targetHeading = 0;
         
         //Turns robot towards Target Heading
         if(curHeading!=targetHeading){
             if(curHeading > 180){
-                    setMotorP(-.5,-.5,.5,.5); //test and set to power that'll ensure greatest accuracy:speed ratio
+                    setMotorP(-power + rf, -power + rb, power + lf, power + lb); //test and set to power that'll ensure greatest accuracy:speed ratio
                     
             }
             else{
-                    setMotorP(.5,.5,-.5,-.5); //test and set to power that'll ensure greatest accuracy:speed ratio
+                    setMotorP(power + rf, power + rb, -power + lf, -power + lb); //test and set to power that'll ensure greatest accuracy:speed ratio
             
             }
         }
@@ -249,7 +279,7 @@ public class Auto extends LinearOpMode {
             telemetry.addData("Status", "Reorienting... Please Wait...");
             telemetry.update();
         }
-        setMotorP(0,0,0,0);
+        setMotorP(rf, rb, lf, lb);
         telemetry.addData("Status","Done!");
         telemetry.update();
     }
