@@ -125,7 +125,7 @@ public class SensorMRGyroTemplate extends LinearOpMode { //INTEGRATE INTO DRIVIN
       // Read dimensionalized data from the gyro. This gyro can report angular velocities
       // about all three axes. Additionally, it internally integrates the Z axis to
       // be able to report an absolute angular Z orientation.
-        // prob won't use Z angle orientation -Alex
+      
       AngularVelocity rates = gyro.getAngularVelocity(AngleUnit.DEGREES);
       float zAngle = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
 

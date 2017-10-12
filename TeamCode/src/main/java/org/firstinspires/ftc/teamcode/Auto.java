@@ -43,6 +43,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -153,10 +157,28 @@ public class Auto extends LinearOpMode {
         }
         //Retract bar (when motor has turned a certain distance, start driving off platform)
         while(opModeIsActive() /*&& motor distance < #*/){
-            //turn on motor that extends bar
+            //turn on motor that controls bar
         }
         //turn off motor
-        //drive off platform (z changes on gyro)
+        //drive off platform (Can use gyro's X or Y angular velocity to know how far to go) <-- when angular velocity == 0, stop motors
+        robot.rightMotorB.setPower(-.5);
+        robot.rightMotorF.setPower(.5);
+        robot.leftMotorF.setPower(-.5);
+        robot.leftMotorB.setPower(.5);
+        
+        sleep(500); //gives robot time to change its X/Y angular velocity (already at 0)
+        float xAngle=robot.gyro.rawX(); 
+        while(opModeIsActive && Math.abs(xAngle) > 1.0){
+            xAngle=robot.gyro.rawX();
+        }
+        robot.rightMotorB.setPower(0);
+        robot.rightMotorF.setPower(0);
+        robot.leftMotorF.setPower(0);
+        robot.leftMotorB.setPower(0);
+        //Reorient robot so it's facing the wall
+        reOrient();
+        //Translate to Right or Left while doing range sensor stuff (left for this code)
+        
         
         
     }
