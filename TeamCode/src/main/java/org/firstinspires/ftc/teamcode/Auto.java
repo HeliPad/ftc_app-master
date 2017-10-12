@@ -177,8 +177,64 @@ public class Auto extends LinearOpMode {
         robot.leftMotorB.setPower(0);
         //Reorient robot so it's facing the wall
         reOrient();
-        //Translate to Right or Left while doing range sensor stuff (left for this code)
+        //Back up a little
         
+        //Translate to Right or Left while doing range sensor stuff (Left for this code)
+        robot.rightMotorB.setPower(-.1);
+        robot.rightMotorF.setPower(.1);
+        robot.leftMotorF.setPower(-.1);
+        robot.leftMotorB.setPower(.1);
+        
+        int prevDistance = robot.range.getDistance(DistanceUnit.CM);
+        int curDistance;
+        int c=0;
+        while(opModeIsActive()){
+            curDistance= robot.range.getDistance(DistanceUnit.CM);
+            if(curDistance<prevDistance - 7){
+                c++;
+            }
+            if(c==1 && vuMark.toString().equals("RIGHT")){
+                robot.rightMotorB.setPower(0);
+                robot.rightMotorF.setPower(0);
+                robot.leftMotorF.setPower(0);
+                robot.leftMotorB.setPower(0);
+                //Reorient robot towards shelves if off (might have to do this while moving instead)
+                reOrient();
+                //after reorienting, we might have to do some minor adjustments if the robot was actually off
+                
+                //Plack blocku
+                
+                break;
+            }
+            else if(c==2 && vuMark.toString().equals("CENTER")){
+                robot.rightMotorB.setPower(0);
+                robot.rightMotorF.setPower(0);
+                robot.leftMotorF.setPower(0);
+                robot.leftMotorB.setPower(0);
+                //Reorient robot towards shelves if off (might have to do this while moving instead)
+                reOrient();
+                //after reorienting, we might have to do some minor adjustments if the robot was actually off
+                
+                //Place blocku
+                
+                break;
+            }
+            else if(c==3 && vuMark.toString().equals("LEFT")){
+                robot.rightMotorB.setPower(0);
+                robot.rightMotorF.setPower(0);
+                robot.leftMotorF.setPower(0);
+                robot.leftMotorB.setPower(0);
+                //Reorient robot towards shelves if off (might have to do this while moving instead)
+                reOrient();
+                //after reorienting, we might have to do some minor adjustments if the robot was actually off
+                
+                //Place blocku
+                
+                break;
+            }
+            prevDistance=curDistance;
+        }
+        //Move to 2nd slot and Park
         
         
     }
