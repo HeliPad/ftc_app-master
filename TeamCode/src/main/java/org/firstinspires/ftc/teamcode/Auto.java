@@ -188,17 +188,17 @@ public class Auto extends LinearOpMode {
         //Translate to Right or Left while doing range sensor stuff (Left for this code)
         setMotorP(.1, -.1, -.1, .1);
         
-        
+        //Range sensor goes on the rightmost point of the robot
         int prevDistance = robot.range.getDistance(DistanceUnit.CM);
         int curDistance;
-        int c=0;
+        int c=0; //# of times robot passes shelf edge
         while(opModeIsActive()){
             curDistance= robot.range.getDistance(DistanceUnit.CM);
             //Reorient code goes here:
             curHeading = robot.gyro.getHeading();
             
-            if (Math.abs(angleDifference(0, curHeading)) > 0) {
-                reOrient(.05, .1, -.1, -.1, .1);
+            if (Math.abs(angleDifference(0, curHeading)) > 1)){
+                reOrient(.05, .1, -.1, -.1, .1); //<-- when this is running, range sensor can't run to check when to stop the robot
             }
             
             if(curDistance<prevDistance - 7){
