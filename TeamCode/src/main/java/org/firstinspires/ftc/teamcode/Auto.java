@@ -189,16 +189,17 @@ public class Auto extends LinearOpMode {
         setMotorP(.1, -.1, -.1, .1);
         
         //Range sensor goes on the rightmost point of the robot
-        int prevDistance = robot.range.getDistance(DistanceUnit.CM);
-        int curDistance;
+        double prevDistance = robot.range.getDistance(DistanceUnit.CM);
+        double curDistance;
         int c=0; //# of times robot passes shelf edge
+        int curHeading;
         while(opModeIsActive()){
             curDistance= robot.range.getDistance(DistanceUnit.CM);
             //Reorient code goes here:
             curHeading = robot.gyro.getHeading();
             
-            if (Math.abs(angleDifference(0, curHeading)) > 1)){
-                reOrient(.05, .1, -.1, -.1, .1); //<-- when this is running, range sensor can't run to check when to stop the robot
+            if (Math.abs(angleDifference(0, curHeading)) > 1){
+                reOrient(.05, .1, -.1, -.1, .1); //<-- when this is running, range sensor can't run to check when to stop the robot (fix)
             }
             
             if(curDistance<prevDistance - 7){
@@ -228,9 +229,8 @@ public class Auto extends LinearOpMode {
             idle();
         }
         //Move to 2nd slot and park
-        int prevDistance = robot.range.getDistance(DistanceUnit.CM);
-        int curDistance;
-        int c=0;
+        prevDistance = robot.range.getDistance(DistanceUnit.CM);
+        c=0;
         while(opModeIsActive() && !vuMark.toString().equals("CENTER")) {
             curDistance = robot.range.getDistance(DistanceUnit.CM);
             if(curDistance<prevDistance - 7){
@@ -258,7 +258,7 @@ public class Auto extends LinearOpMode {
     }
 
     //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
-    public void reOrient(float power, float rf, float rb, float lf, float lb){
+    public void reOrient(double power, double rf, double rb, double lf, double lb){
         float curHeading = (float)robot.gyro.getHeading();
         int targetHeading = 0;
         
@@ -283,7 +283,7 @@ public class Auto extends LinearOpMode {
         telemetry.addData("Status","Done!");
         telemetry.update();
     }
-    public void setMotorP(float rf, float rb, float lf, float lb ){
+    public void setMotorP(double rf, double rb, double lf, double lb ){
         robot.rightMotorF.setPower(rf);
         robot.rightMotorB.setPower(rb);
         robot.leftMotorF.setPower(lf);
