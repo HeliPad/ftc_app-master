@@ -176,13 +176,13 @@ public class Auto extends LinearOpMode {
         
         sleep(500); //gives robot time to change its X/Y angular velocity (already at 0)
         float xAngle=robot.gyro.rawX(); 
-        while(opModeIsActive && Math.abs(xAngle) > 1.0){
+        while(opModeIsActive() && Math.abs(xAngle) > 1.0){
             xAngle=robot.gyro.rawX();
             idle();
         }
         setMotorP(0,0,0,0);
         //Reorient robot so it's facing the wall
-        reOrient(.5, 0, 0, 0, 0);
+        reOrient(.5, 0, 0, 0, 0, false);
         //Back up a little (when we get off the balance oard, we're too close to the wall)
         
         //Translate to Right or Left while doing range sensor stuff (Left for this code)
@@ -199,7 +199,7 @@ public class Auto extends LinearOpMode {
             curHeading = robot.gyro.getHeading();
             
             if (Math.abs(angleDifference(0, curHeading)) > 1){
-                reOrient(.05, .1, -.1, -.1, .1); 
+                reOrient(.05, .1, -.1, -.1, .1, true); 
             }
             
             if(curDistance<prevDistance - 7){
