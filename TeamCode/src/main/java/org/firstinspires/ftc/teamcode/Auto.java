@@ -194,17 +194,18 @@ public class Auto extends LinearOpMode {
         int c=0; //# of times robot passes shelf edge
         int curHeading;
         while(opModeIsActive()){
-            curDistance= robot.range.getDistance(DistanceUnit.CM);
+            curDistance = robot.range.getDistance(DistanceUnit.CM);
             //Reorient code goes here:
             curHeading = robot.gyro.getHeading();
             
             if (Math.abs(angleDifference(0, curHeading)) > 1){
-                reOrient(.05, .1, -.1, -.1, .1); //<-- when this is running, range sensor can't run to check when to stop the robot (fix)
+                reOrient(.05, .1, -.1, -.1, .1); 
             }
             
             if(curDistance<prevDistance - 7){
                 c++;
             }
+            
             if(c==1 && vuMark.toString().equals("RIGHT")){
                 setMotorP(0,0,0,0);
                
@@ -258,7 +259,7 @@ public class Auto extends LinearOpMode {
     }
 
     //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
-    public void reOrient(double power, double rf, double rb, double lf, double lb){
+    public void reOrient(double power, double rf, double rb, double lf, double lb, boolean step){
         float curHeading = (float)robot.gyro.getHeading();
         int targetHeading = 0;
         
@@ -273,11 +274,18 @@ public class Auto extends LinearOpMode {
             
             }
         }
+        if(step){
+            if(robot.gyro.getHeading()!=targetHeading){
+                return;
+            }
+        }
+        else{
         //when the loop breaks, the robot is at the targetHeading
-        while (robot.gyro.getHeading() != targetHeading)
-        {
-            telemetry.addData("Status", "Reorienting... Please Wait...");
-            telemetry.update();
+            while (robot.gyro.getHeading() != targetHeading)
+            {
+                telemetry.addData("Status", "Reorienting... Please Wait...");
+                telemetry.update();
+            }
         }
         setMotorP(rf, rb, lf, lb);
         telemetry.addData("Status","Done!");
