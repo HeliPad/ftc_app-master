@@ -212,6 +212,7 @@ public class Auto extends LinearOpMode {
 
                 break;
             }
+            
             else if(c==2 && vuMark.toString().equals("CENTER")){
                 setMotorP(0,0,0,0);
                 //Place blocku
