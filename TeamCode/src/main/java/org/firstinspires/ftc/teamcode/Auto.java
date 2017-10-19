@@ -36,17 +36,17 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
+//import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
+//import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+//import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+//import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
+//import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+//import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -79,50 +79,49 @@ public class Auto extends LinearOpMode {
      * 10. Reorient robot after it finds the correct slot
      * 11. Park in parking zone by moving back (or forwards) to the 2nd slot (^similar loop)
      **/
-     
+
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     Hardware robot=new Hardware();
-    
-    private VuforiaLocalizer vuforia;
-    
-    public int mod(int num, int div) {
+
+    private int mod(int num, int div) {
         return num - (int)Math.floor((float)num/div)*div;
     }
-    
-    public int angleDifference(int a1, int a2){
+
+    private int angleDifference(int a1, int a2){
         return mod(a1 - a2 + 180, 360) - 180;
     }
 
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
-        
+
+        VuforiaLocalizer vuforia;
         int cameraMonitorViewId = robot.hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", robot.hwMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        
+
         parameters.vuforiaLicenseKey = "AQciC17/////AAAAGcHm/ae3S08LoppTUUYYhUt7QoRjsJ4DoYOBzI9Dm8tvE3Q/J" +
-            "tmd61aFoXpPo27FDqgLMGRfL50nNxwiyLGgilckQSUmvdaOM5u+66J6rNQk3KTkQb+BsajnaJ8ekm525CPOEoTGK0" +
-            "QLsuHPISeLIUUPdegnqhtyEZCQZE5bcvDQfv6aT0BvDZGpm09qhQmFWpmZrU1nNaLwCOELCD8g/Q9s2TfBi2BZtkC" +
-            "5S/CeKmzfrzed7RWQo0showZqx4bEQZLMgYUedAxvjaF8mknAuP1oMGb0udO/b0w6oLUHiGzXTaaf+q7zcTh8SXPLsIp" +
-            "Pu4av6gGiENWcUz7hczRQEMi3ZqJIyjbLCyV7psrGovSp";    
-    
+                "tmd61aFoXpPo27FDqgLMGRfL50nNxwiyLGgilckQSUmvdaOM5u+66J6rNQk3KTkQb+BsajnaJ8ekm525CPOEoTGK0" +
+                "QLsuHPISeLIUUPdegnqhtyEZCQZE5bcvDQfv6aT0BvDZGpm09qhQmFWpmZrU1nNaLwCOELCD8g/Q9s2TfBi2BZtkC" +
+                "5S/CeKmzfrzed7RWQo0showZqx4bEQZLMgYUedAxvjaF8mknAuP1oMGb0udO/b0w6oLUHiGzXTaaf+q7zcTh8SXPLsIp" +
+                "Pu4av6gGiENWcUz7hczRQEMi3ZqJIyjbLCyV7psrGovSp";
+
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-        
-        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
+        vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+
+        VuforiaTrackables relicTrackables = vuforia.loadTrackablesFromAsset("RelicVuMark");
         VuforiaTrackable relicTemplate = relicTrackables.get(0);
-     
+
         telemetry.addData("Status", "Initialized");
-        
+
         telemetry.addData("Status", "Calibrating the Gyro...");
         telemetry.update();
-        
+
         robot.gyro.calibrate();
-        
+
         telemetry.addData("Status", "Calibration Finished!");
         telemetry.update();
-        
+
         //For color sensor
         int red;
         int blue;
@@ -133,28 +132,28 @@ public class Auto extends LinearOpMode {
         relicTrackables.activate();
 
         RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-        
+
         while (opModeIsActive() && vuMark == RelicRecoveryVuMark.UNKNOWN) { // for finding starting image
             vuMark = RelicRecoveryVuMark.from(relicTemplate); // will be an Enum like RelicRecoveryVuMark.UNKNOWN or RelicRecoveryVuMark.CENTER
             idle();
         }
         telemetry.addData("Status", "Found image! Key is the " + vuMark + "!");
         telemetry.update();
-        
+
         //Sets color sensor to active mode (for reading objects that aren't light sources) 
-        robot.color.enableLed(true); 
-            
+        robot.color.enableLed(true);
+
         // run until the end of the match (driver presses STOP)
-       
+
         //Extend Bar (might need encoders)
         while(opModeIsActive() /*&& motor distance < #*/){
             //turn on motor that extends bar
             idle();
         }
         //turn off motor that extends bar
-            
+
         sleep(200); //Gives motor time to stop
-            
+
         //Color Sensor stuff:
         //Get the red and blue values from RGB
         red=robot.color.red();
@@ -173,21 +172,21 @@ public class Auto extends LinearOpMode {
         //turn off motor
         //drive off platform (Can use gyro's X or Y angular velocity to know how far to go) <-- when angular velocity == 0, stop motors
         setMotorP(.1, -.1, -.1, .1);
-        
+
         sleep(500); //gives robot time to change its X/Y angular velocity (already at 0)
-        float xAngle=robot.gyro.rawX(); 
-        while(opModeIsActive && Math.abs(xAngle) > 1.0){
+        float xAngle=robot.gyro.rawX();
+        while(opModeIsActive() && Math.abs(xAngle) > 1.0){
             xAngle=robot.gyro.rawX();
             idle();
         }
         setMotorP(0,0,0,0);
         //Reorient robot so it's facing the wall
-        reOrient(.5, 0, 0, 0, 0);
+        reOrient(.5, 0, 0, 0, 0, false);
         //Back up a little (when we get off the balance oard, we're too close to the wall)
-        
+
         //Translate to Right or Left while doing range sensor stuff (Left for this code)
         setMotorP(.1, -.1, -.1, .1);
-        
+
         //Range sensor goes on the rightmost point of the robot
         double prevDistance = robot.range.getDistance(DistanceUnit.CM);
         double curDistance;
@@ -197,33 +196,33 @@ public class Auto extends LinearOpMode {
             curDistance = robot.range.getDistance(DistanceUnit.CM);
             //Reorient code goes here:
             curHeading = robot.gyro.getHeading();
-            
+
             if (Math.abs(angleDifference(0, curHeading)) > 1){
-                reOrient(.05, .1, -.1, -.1, .1); 
+                reOrient(.05, .1, -.1, -.1, .1, true);
             }
-            
+
             if(curDistance<prevDistance - 7){
                 c++;
             }
-            
+
             if(c==1 && vuMark.toString().equals("RIGHT")){
                 setMotorP(0,0,0,0);
-               
+
                 //Plack blocku
-                
+
                 break;
             }
             else if(c==2 && vuMark.toString().equals("CENTER")){
                 setMotorP(0,0,0,0);
                 //Place blocku
-                
+
                 break;
             }
             else if(c==3 && vuMark.toString().equals("LEFT")){
                 setMotorP(0,0,0,0);
-               
+
                 //Place blocku
-                
+
                 break;
             }
             prevDistance = curDistance;
@@ -259,19 +258,19 @@ public class Auto extends LinearOpMode {
     }
 
     //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
-    public void reOrient(double power, double rf, double rb, double lf, double lb, boolean step){
+    private void reOrient(double power, double rf, double rb, double lf, double lb, boolean step){
         float curHeading = (float)robot.gyro.getHeading();
         int targetHeading = 0;
-        
+
         //Turns robot towards Target Heading
         if(curHeading!=targetHeading){
             if(curHeading > 180){
-                    setMotorP(-power + rf, -power + rb, power + lf, power + lb); //test and set to power that'll ensure greatest accuracy:speed ratio
-                    
+                setMotorP(-power + rf, -power + rb, power + lf, power + lb); //test and set to power that'll ensure greatest accuracy:speed ratio
+
             }
             else{
-                    setMotorP(power + rf, power + rb, -power + lf, -power + lb); //test and set to power that'll ensure greatest accuracy:speed ratio
-            
+                setMotorP(power + rf, power + rb, -power + lf, -power + lb); //test and set to power that'll ensure greatest accuracy:speed ratio
+
             }
         }
         if(step){
@@ -280,7 +279,7 @@ public class Auto extends LinearOpMode {
             }
         }
         else{
-        //when the loop breaks, the robot is at the targetHeading
+            //when the loop breaks, the robot is at the targetHeading
             while (robot.gyro.getHeading() != targetHeading)
             {
                 telemetry.addData("Status", "Reorienting... Please Wait...");
@@ -291,7 +290,7 @@ public class Auto extends LinearOpMode {
         telemetry.addData("Status","Done!");
         telemetry.update();
     }
-    public void setMotorP(double rf, double rb, double lf, double lb ){
+    private void setMotorP(double rf, double rb, double lf, double lb ){
         robot.rightMotorF.setPower(rf);
         robot.rightMotorB.setPower(rb);
         robot.leftMotorF.setPower(lf);

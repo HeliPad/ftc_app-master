@@ -32,13 +32,11 @@ package org.firstinspires.ftc.teamcode;
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.lang.Math.*;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+//import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
+//import com.qualcomm.robotcore.util.Range;
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -53,18 +51,18 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="ControlOperation", group="Linear Opmode")
+@TeleOp(name="DrivingMain", group="Linear Opmode")
 public class DrivingMain extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     Hardware robot=new Hardware();
     
-    public int mod(int num, int div) {
+    private int mod(int num, int div) {
         return num - (int)Math.floor((float)num/div)*div;
     }
     
-    public int angleDifference(int a1, int a2){
+    private int angleDifference(int a1, int a2){
         return mod(a1 - a2 + 180, 360) - 180;
     }
 
@@ -90,7 +88,7 @@ public class DrivingMain extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            double rfPower = 0, rbPower = 0, lfPower = 0, lbPower = 0;
+            double rfPower, rbPower, lfPower, lbPower;
             double xl = gamepad1.left_stick_x, yl = -gamepad1.left_stick_y; //moving thumbstick up results in -y value
             double xr = gamepad1.right_stick_x;
 
@@ -165,7 +163,7 @@ public class DrivingMain extends LinearOpMode {
     }
 
     //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
-    public void reOrient() {
+    private void reOrient() {
         int curHeading = robot.gyro.getHeading();
         //target heading is from 0-360 (0,90,180,270,360)
         int targetHeading = (int)(curHeading/90.0 + 0.5) * 90;
