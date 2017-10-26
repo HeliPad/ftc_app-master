@@ -43,8 +43,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-//import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-//import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 //import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 //import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
@@ -174,9 +174,12 @@ public class Auto extends LinearOpMode {
         setMotorP(.1, -.1, -.1, .1);
 
         sleep(500); //gives robot time to change its X/Y angular velocity (already at 0)
-        float xAngle=robot.gyro.rawX();
-        while(opModeIsActive() && Math.abs(xAngle) > 1.0){
-            xAngle=robot.gyro.rawX();
+        //Tells robot when to stop
+        AngularVelocity rates = robot.gyro.getAngularVelocity(AngleUnit.DEGREES);
+        float dyAngle= rates.yRotationRate;
+        while(opModeIsActive() && Math.abs(dyAngle) < 20.0){
+            rates = robot.gyro.getAngularVelocity(AngleUnit.DEGREES);
+            dyAngle = rates.yRotationRate;
             idle();
         }
         setMotorP(0,0,0,0);
