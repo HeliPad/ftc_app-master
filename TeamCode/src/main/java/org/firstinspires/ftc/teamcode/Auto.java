@@ -266,11 +266,11 @@ public class Auto extends LinearOpMode {
         //Turns robot towards Target Heading
         if(curHeading!=targetHeading){
             if(curHeading > 180){
-                setMotorP(-power + rf, -power + rb, power + lf, power + lb); //test and set to power that'll ensure greatest accuracy:speed ratio
+                setMotorP(power + rf, power + rb, -power + lf, -power + lb); //test and set to power that'll ensure greatest accuracy:speed ratio
 
             }
             else{
-                setMotorP(power + rf, power + rb, -power + lf, -power + lb); //test and set to power that'll ensure greatest accuracy:speed ratio
+                setMotorP(-power + rf, -power + rb, power + lf, power + lb); //test and set to power that'll ensure greatest accuracy:speed ratio
 
             }
         }
@@ -306,4 +306,5 @@ git commit -m "[Insert Commit Here]"
 
 git push -u origin master
 
+git pull
 */
