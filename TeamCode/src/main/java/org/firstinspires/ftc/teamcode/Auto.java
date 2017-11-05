@@ -83,16 +83,21 @@ public class Auto extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     Hardware robot=new Hardware();
+    private boolean isBlue=false;
+    private boolean doTurn=false;
+    public Auto(boolean isBlue, boolean doTurn) {
+        this.isBlue=isBlue;
+        this.doTurn=doTurn;
+    }
 
     private int mod(int num, int div) {
         return num - (int)Math.floor((float)num/div)*div;
     }
 
-    private int angleDifference(int a1, int a2){
+    private int angleDifference(int a1, int a2) {
         return mod(a1 - a2 + 180, 360) - 180;
     }
 
-    @Override
     public void runOpMode() {
         robot.init(hardwareMap);
 
@@ -160,9 +165,21 @@ public class Auto extends LinearOpMode {
         blue=robot.color.blue();
         if(red>blue){
             //hit ball based on alliance
+            if(isBlue){
+                
+            }
+            else{
+                
+            }
         }
         else if(blue>red){
             //hit ball based on alliance
+            if(isBlue()){
+                
+            }
+            else{
+                
+            }
         }
         //Retract bar (when motor has turned a certain distance, start driving off platform)
         while(opModeIsActive() /*&& motor distance < #*/){
@@ -170,25 +187,71 @@ public class Auto extends LinearOpMode {
             idle();
         }
         //turn off motor
+        //Turn robot if object is X2:
+        if(doTurn){
+            reOrient(.5,0,0,0,0, false, (isBlue ? 270 : 90));
+        }
         //drive off platform (Can use gyro's X or Y angular velocity to know how far to go) <-- when angular velocity == 0, stop motors
-        setMotorP(.1, -.1, -.1, .1);
-
-        sleep(500); //gives robot time to change its X/Y angular velocity (already at 0)
+        if(doTurn){
+            setMotorP(1, 1, 1, 1);
+        }
+        else if(!isBlue){
+            setMotorP(.1, -.1, -.1, .1);
+        }
+        else{
+            setMotorP(-.1, .1, .1, -.1);
+        }
+        
         //Tells robot when to stop
         AngularVelocity rates = robot.gyro.getAngularVelocity(AngleUnit.DEGREES);
-        float dyAngle= rates.yRotationRate;
-        while(opModeIsActive() && Math.abs(dyAngle) < 20.0){
-            rates = robot.gyro.getAngularVelocity(AngleUnit.DEGREES);
-            dyAngle = rates.yRotationRate;
-            idle();
+        if(!doturn){
+            float dyAngle= rates.yRotationRate;
+            while(opModeIsActive() && Math.abs(dyAngle) < 20.0){
+                rates = robot.gyro.getAngularVelocity(AngleUnit.DEGREES);
+                dyAngle = rates.yRotationRate);
+                idle();
+            }
+        }
+        else{
+            setMotorP(.5, .5, .5, .5);
+            while(robot.range.getDistance(DistanceUnit.CM) > 15){
+                telemetry.addData("Status:" , "Moving towards shelves...");
+                telemetry.update();
+            }
+            setMotorP(0, 0, 0, 0);
+            telemetry.addData("Status:" , "Done!");
+            telemetry.update();
+            //move robot to right (or left depending on alliance) to see if it's before the start of the shelves
+            int curtime= (int)runtime.seconds();
+            if(!isBlue){
+                setMotorP(-.5, .5, .5, -.5);
+            }
+            else{
+                setMotorP(.5, -.5, -.5, .5);
+            }
+            double prevDist = robot.range.getDistance(DistanceUnit.CM);
+            double curDist;
+            //Checks to see if the robot passes a shelf, then adds 2 seconds longer to check 
+            while(runtime.seconds() < curtime + 2){
+                curDist = robot.range.getDistance(DistanceUnit.CM);
+                //Adds two seconds if it finds a shelf
+                if(curDist<=prevDist - 7){
+                    curtime=(int)runtime.seconds();
+                }
+                prevDist=curDist;
+            }
+            
         }
         setMotorP(0,0,0,0);
-        //Reorient robot so it's facing the wall
-        reOrient(.5, 0, 0, 0, 0, false);
-        //Back up a little (when we get off the balance oard, we're too close to the wall)
+        //Back up a little (when we get off the balance board, we're too close to the wall)
 
-        //Translate to Right or Left while doing range sensor stuff (Left for this code)
-        setMotorP(.1, -.1, -.1, .1);
+        //Translate to Right or Left while doing range sensor stuff
+        if(!isBlue){
+            setMotorP(.1, -.1, -.1, .1);
+        }
+        else{
+            setMotorP(-.1,.1,.1,-.1);
+        }
 
         //Range sensor goes on the rightmost point of the robot
         double prevDistance = robot.range.getDistance(DistanceUnit.CM);
@@ -200,15 +263,15 @@ public class Auto extends LinearOpMode {
             //Reorient code goes here:
             curHeading = robot.gyro.getHeading();
 
-            if (Math.abs(angleDifference(0, curHeading)) > 1){
-                reOrient(.05, .1, -.1, -.1, .1, true);
+            if (Math.abs(angleDifference((doTurn ? (isBlue ? 270:90) : 0), curHeading)) > 1){
+                reOrient(.05, .1, -.1, -.1, .1, true, (doTurn ? (isBlue ? 270:90) : 0));
             }
 
             if(curDistance<prevDistance - 7){
                 c++;
             }
 
-            if(c==1 && vuMark.toString().equals("RIGHT")){
+            if(c==(isBlue ? 2 : 1) && vuMark.toString().equals((isBlue ? "LEFT" : "RIGHT"))){
                 setMotorP(0,0,0,0);
 
                 //Plack blocku
@@ -216,13 +279,13 @@ public class Auto extends LinearOpMode {
                 break;
             }
             
-            else if(c==2 && vuMark.toString().equals("CENTER")){
+            else if(c==(isBlue ? 3 : 2) && vuMark.toString().equals("CENTER")){
                 setMotorP(0,0,0,0);
                 //Place blocku
 
                 break;
             }
-            else if(c==3 && vuMark.toString().equals("LEFT")){
+            else if(c==(isBlue ? 4 : 3) && vuMark.toString().equals((isBlue ? "LEFT" : "RIGHT"))){
                 setMotorP(0,0,0,0);
 
                 //Place blocku
@@ -237,19 +300,19 @@ public class Auto extends LinearOpMode {
         c=0;
         while(opModeIsActive() && !vuMark.toString().equals("CENTER")) {
             curDistance = robot.range.getDistance(DistanceUnit.CM);
-            if(curDistance<prevDistance - 7){
+            if(curDistance<=prevDistance - 7){
                 c++;
             }
             if(vuMark.toString().equals("LEFT")){
                 setMotorP(-.1, .1, .1, -.1);
-                if(c==2){
+                if(c==(isBlue ? 1 : 2)){
                     setMotorP(0, 0, 0, 0);
                     break;
                 }
             }
             else if(vuMark.toString().equals("RIGHT")){
                 setMotorP(.1, -.1, -.1, .1);
-                if(c==1){
+                if(c==(isBlue ? 2 : 1)){
                     setMotorP(0, 0, 0, 0);
                     break;
                 }
@@ -262,9 +325,8 @@ public class Auto extends LinearOpMode {
     }
 
     //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
-    private void reOrient(double power, double rf, double rb, double lf, double lb, boolean step){
+    private void reOrient(double power, double rf, double rb, double lf, double lb, boolean step, int targetHeading){
         float curHeading = (float)robot.gyro.getHeading();
-        int targetHeading = 0;
 
         //Turns robot towards Target Heading
         if(curHeading!=targetHeading){
@@ -310,4 +372,9 @@ git commit -m "[Insert Commit Here]"
 git push -u origin master
 
 git pull
+
+Alliance specific things: 
+- Change direction when moving off BB <-- done
+- account for range sensor position (range sensor side of robot reaches shelf first on blue alliance)
+- reverse direction for turning to face shelves
 */
