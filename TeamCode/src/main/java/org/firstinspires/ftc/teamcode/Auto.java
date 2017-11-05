@@ -174,7 +174,7 @@ public class Auto extends LinearOpMode {
         }
         else if(blue>red){
             //hit ball based on alliance
-            if(isBlue()){
+            if(isBlue){
                 
             }
             else{
@@ -204,11 +204,11 @@ public class Auto extends LinearOpMode {
         
         //Tells robot when to stop
         AngularVelocity rates = robot.gyro.getAngularVelocity(AngleUnit.DEGREES);
-        if(!doturn){
+        if(!doTurn){
             float dyAngle= rates.yRotationRate;
             while(opModeIsActive() && Math.abs(dyAngle) < 20.0){
                 rates = robot.gyro.getAngularVelocity(AngleUnit.DEGREES);
-                dyAngle = rates.yRotationRate);
+                dyAngle = rates.yRotationRate;
                 idle();
             }
             setMotorP(0, 0, 0, 0);
