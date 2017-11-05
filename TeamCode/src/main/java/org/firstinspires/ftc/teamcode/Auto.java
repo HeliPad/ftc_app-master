@@ -211,6 +211,21 @@ public class Auto extends LinearOpMode {
                 dyAngle = rates.yRotationRate);
                 idle();
             }
+            setMotorP(0, 0, 0, 0);
+            
+            //Moves robot so it's consistenly 15 cm. from wall
+            if(robot.range.getDistance(DistanceUnit.CM)>15){
+                setMotorP(.2, .2, .2, .2);
+                while(robot.range.getDistance(DistanceUnit.CM)>15){
+                    
+                }
+            }
+            else if(robot.range.getDistance(DistanceUnit.CM)<15){
+                setMotorP(-.2, -.2, -.2, -.2);
+                while(robot.range.getDistance(DistanceUnit.CM)<15){
+                    
+                }
+            }
         }
         else{
             setMotorP(.5, .5, .5, .5);
@@ -243,8 +258,9 @@ public class Auto extends LinearOpMode {
             
         }
         setMotorP(0,0,0,0);
-        //Back up a little (when we get off the balance board, we're too close to the wall)
-
+        
+        reOrient(.5,0,0,0,0, false, (doTurn ? (isBlue ? 270 : 90) : 0));
+        
         //Translate to Right or Left while doing range sensor stuff
         if(!isBlue){
             setMotorP(.1, -.1, -.1, .1);
