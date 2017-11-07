@@ -61,7 +61,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auto", group="Automus")
+//@Autonomous(name="Auto", group="Automus")
 public class Auto extends LinearOpMode {
     /**
      * Steps for Autonomous:
@@ -127,7 +127,7 @@ public class Auto extends LinearOpMode {
         telemetry.addData("Status", "Calibration Finished!");
         telemetry.update();
 
-        //For color sensor
+        // For color sensor
         int red;
         int blue;
 
@@ -145,26 +145,24 @@ public class Auto extends LinearOpMode {
         telemetry.addData("Status", "Found image! Key is the " + vuMark + "!");
         telemetry.update();
 
-        //Sets color sensor to active mode (for reading objects that aren't light sources) 
+        // Sets color sensor to active mode (for reading objects that aren't light sources) 
         robot.color.enableLed(true);
 
-        // run until the end of the match (driver presses STOP)
-
-        //Extend Bar (might need encoders)
+        // Extend Bar (might need encoders)
         while(opModeIsActive() /*&& motor distance < #*/){
             //turn on motor that extends bar
             idle();
         }
-        //turn off motor that extends bar
+        // turn off motor that extends bar
 
-        sleep(200); //Gives motor time to stop
+        sleep(200); // Gives motor time to stop
 
-        //Color Sensor stuff:
-        //Get the red and blue values from RGB
+        // Color Sensor stuff:
+        // Get the red and blue values from RGB
         red=robot.color.red();
         blue=robot.color.blue();
         if(red>blue){
-            //hit ball based on alliance
+            // hit ball based on alliance
             if(isBlue){
                 
             }
@@ -173,7 +171,7 @@ public class Auto extends LinearOpMode {
             }
         }
         else if(blue>red){
-            //hit ball based on alliance
+            // hit ball based on alliance
             if(isBlue){
                 
             }
@@ -181,17 +179,17 @@ public class Auto extends LinearOpMode {
                 
             }
         }
-        //Retract bar (when motor has turned a certain distance, start driving off platform)
+        // Retract bar (when motor has turned a certain distance, start driving off platform)
         while(opModeIsActive() /*&& motor distance < #*/){
-            //turn on motor that controls bar
+            // turn on motor that controls bar
             idle();
         }
-        //turn off motor
-        //Turn robot if object is X2:
+        // turn off motor
+        // Turn robot if class that calls object is R2 or B2
         if(doTurn){
             reOrient(.5,0,0,0,0, false, (isBlue ? 270 : 90));
         }
-        //drive off platform (Can use gyro's X or Y angular velocity to know how far to go) <-- when angular velocity == 0, stop motors
+        // drive off platform (Can use gyro's X or Y angular velocity to know how far to go) <-- when angular velocity == 0, stop motors
         if(doTurn){
             setMotorP(1, 1, 1, 1);
         }
@@ -202,7 +200,7 @@ public class Auto extends LinearOpMode {
             setMotorP(-.1, .1, .1, -.1);
         }
         
-        //Tells robot when to stop
+        // Tells robot when to stop
         AngularVelocity rates = robot.gyro.getAngularVelocity(AngleUnit.DEGREES);
         if(!doTurn){
             float dyAngle= rates.yRotationRate;
@@ -213,17 +211,17 @@ public class Auto extends LinearOpMode {
             }
             setMotorP(0, 0, 0, 0);
             
-            //Moves robot so it's consistenly 15 cm. from wall
+            // Moves robot so it's consistenly 15 cm. from wall
             if(robot.range.getDistance(DistanceUnit.CM)>15){
                 setMotorP(.2, .2, .2, .2);
                 while(robot.range.getDistance(DistanceUnit.CM)>15){
-                    
+                    idle();
                 }
             }
             else if(robot.range.getDistance(DistanceUnit.CM)<15){
                 setMotorP(-.2, -.2, -.2, -.2);
                 while(robot.range.getDistance(DistanceUnit.CM)<15){
-                    
+                    idle();
                 }
             }
         }
@@ -236,8 +234,8 @@ public class Auto extends LinearOpMode {
             setMotorP(0, 0, 0, 0);
             telemetry.addData("Status:" , "Done!");
             telemetry.update();
-            //move robot to right (or left depending on alliance) to see if it's before the start of the shelves
-            int curtime= (int)runtime.seconds();
+            // Move robot to right (or left depending on alliance) to see if it's before the start of the shelves
+            double startTime = runtime.seconds();
             if(!isBlue){
                 setMotorP(-.5, .5, .5, -.5);
             }
@@ -246,10 +244,10 @@ public class Auto extends LinearOpMode {
             }
             double prevDist = robot.range.getDistance(DistanceUnit.CM);
             double curDist;
-            //Checks to see if the robot passes a shelf, then adds 2 seconds longer to check 
-            while(runtime.seconds() < curtime + 2){
+            // Checks to see if the robot passes a shelf, then adds 2 seconds longer to check 
+            while(runtime.seconds() < startTime + 2){
                 curDist = robot.range.getDistance(DistanceUnit.CM);
-                //Adds two seconds if it finds a shelf
+                // Adds two seconds if it finds a shelf 
                 if(curDist<=prevDist - 7){
                     curtime=(int)runtime.seconds();
                 }
@@ -259,9 +257,10 @@ public class Auto extends LinearOpMode {
         }
         setMotorP(0,0,0,0);
         
+        // Reorients robot to face the wall
         reOrient(.5,0,0,0,0, false, (doTurn ? (isBlue ? 270 : 90) : 0));
         
-        //Translate to Right or Left while doing range sensor stuff
+        // Translate to Right or Left while doing range sensor stuff
         if(!isBlue){
             setMotorP(.1, -.1, -.1, .1);
         }
@@ -269,14 +268,14 @@ public class Auto extends LinearOpMode {
             setMotorP(-.1,.1,.1,-.1);
         }
 
-        //Range sensor goes on the rightmost point of the robot
+        // Range sensor goes on the rightmost point of the robot
         double prevDistance = robot.range.getDistance(DistanceUnit.CM);
         double curDistance;
-        int c=0; //# of times robot passes shelf edge
+        int c=0; // # of times robot passes shelf edge
         int curHeading;
         while(opModeIsActive()){
             curDistance = robot.range.getDistance(DistanceUnit.CM);
-            //Reorient code goes here:
+            // Reorient code goes here:
             curHeading = robot.gyro.getHeading();
 
             if (Math.abs(angleDifference((doTurn ? (isBlue ? 270:90) : 0), curHeading)) > 1){
@@ -290,45 +289,46 @@ public class Auto extends LinearOpMode {
             if(c==(isBlue ? 2 : 1) && vuMark.toString().equals((isBlue ? "LEFT" : "RIGHT"))){
                 setMotorP(0,0,0,0);
 
-                //Plack blocku
+                // Plack blocku
 
                 break;
             }
             
             else if(c==(isBlue ? 3 : 2) && vuMark.toString().equals("CENTER")){
                 setMotorP(0,0,0,0);
-                //Place blocku
+                // Place blocku
 
                 break;
             }
-            else if(c==(isBlue ? 4 : 3) && vuMark.toString().equals((isBlue ? "LEFT" : "RIGHT"))){
+            else if(c==(isBlue ? 4 : 3) && vuMark.toString().equals((isBlue ? "RIGHT" : "LEFT"))){
                 setMotorP(0,0,0,0);
 
-                //Place blocku
-
+                // Place blocku
+                
                 break;
             }
             prevDistance = curDistance;
             idle();
         }
-        //Move to 2nd slot and park
+        // Move to 2nd slot and park
         prevDistance = robot.range.getDistance(DistanceUnit.CM);
         c=0;
+        double startTime = runtime.seconds();
         while(opModeIsActive() && !vuMark.toString().equals("CENTER")) {
             curDistance = robot.range.getDistance(DistanceUnit.CM);
-            if(curDistance<=prevDistance - 7){
+            if(curDistance<=prevDistance - 7 && runtime.seconds()-startTime > 1){
                 c++;
             }
             if(vuMark.toString().equals("LEFT")){
                 setMotorP(-.1, .1, .1, -.1);
-                if(c==(isBlue ? 1 : 2)){
+                if(c==1){
                     setMotorP(0, 0, 0, 0);
                     break;
                 }
             }
             else if(vuMark.toString().equals("RIGHT")){
                 setMotorP(.1, -.1, -.1, .1);
-                if(c==(isBlue ? 2 : 1)){
+                if(c==1){
                     setMotorP(0, 0, 0, 0);
                     break;
                 }
@@ -340,11 +340,11 @@ public class Auto extends LinearOpMode {
         telemetry.update();
     }
 
-    //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
+    // Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
     private void reOrient(double power, double rf, double rb, double lf, double lb, boolean step, int targetHeading){
         float curHeading = (float)robot.gyro.getHeading();
 
-        //Turns robot towards Target Heading
+        // Turns robot towards Target Heading
         if(curHeading!=targetHeading){
             if(curHeading > 180){
                 setMotorP(power + rf, power + rb, -power + lf, -power + lb); //test and set to power that'll ensure greatest accuracy:speed ratio
@@ -361,7 +361,7 @@ public class Auto extends LinearOpMode {
             }
         }
         else{
-            //when the loop breaks, the robot is at the targetHeading
+            // when the loop breaks, the robot is at the targetHeading
             while (robot.gyro.getHeading() != targetHeading)
             {
                 telemetry.addData("Status", "Reorienting... Please Wait...");
@@ -379,7 +379,7 @@ public class Auto extends LinearOpMode {
         robot.leftMotorB.setPower(lb);
     }
 }
-//https://gist.github.com/jboulhous/6007980
+// https://gist.github.com/jboulhous/6007980
 
 /*
 git add .
