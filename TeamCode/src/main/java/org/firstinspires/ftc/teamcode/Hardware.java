@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -101,10 +102,10 @@ public class Hardware
         leftMotorB = hwMap.dcMotor.get("Left motor 2");
         rightMotorB = hwMap.dcMotor.get("Right motor 2");
 
-        leftMotorF.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-        rightMotorF.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
-        leftMotorB.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-        rightMotorB.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+        leftMotorF.setDirection(DcMotor.Direction.FORWARD); // Set to FORWARD if using AndyMark motors
+        rightMotorF.setDirection(DcMotor.Direction.REVERSE);// Set to REVERSE if using AndyMark motors
+        leftMotorB.setDirection(DcMotor.Direction.FORWARD); // Set to FORWARD if using AndyMark motors
+        rightMotorB.setDirection(DcMotor.Direction.REVERSE);// Set to REVERSE if using AndyMark motors
 
         leftMotorF.setPower(0);
         rightMotorF.setPower(0);
