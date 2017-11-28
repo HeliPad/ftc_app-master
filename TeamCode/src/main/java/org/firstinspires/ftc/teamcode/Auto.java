@@ -45,6 +45,7 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
+import org.firstinspires.ftc.teamcode.Tween;
 //import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 //import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
@@ -82,6 +83,7 @@ public class Auto extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
+    private Tween tween = new Tween(runtime);
     Hardware robot=new Hardware();
     private boolean isBlue=false;
     private boolean doTurn=false;
@@ -249,7 +251,7 @@ public class Auto extends LinearOpMode {
                 curDist = robot.range.getDistance(DistanceUnit.CM);
                 // Adds two seconds if it finds a shelf 
                 if(curDist<=prevDist - 7){
-                    curtime=(int)runtime.seconds();
+                    startTime=(int)runtime.seconds();
                 }
                 prevDist=curDist;
             }

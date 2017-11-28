@@ -37,6 +37,17 @@ public class Hardware
     public DcMotor rightMotorF = null;
     public DcMotor leftMotorB = null;
     public DcMotor rightMotorB = null;
+    public DcMotor raiseMotor = null;
+    public DcMotor armExtendMotor = null;
+    public DcMotor armLiftMotor = null;
+
+    public Servo leftGrabServo = null;
+    public Servo rightGrabServo = null;
+    public Servo railServo = null;
+    public Servo handSpinServo = null;
+    //public Servo jDropServo = null;
+    public Servo jSlapServo = null;
+
     public ColorSensor color = null;
     public ModernRoboticsI2cRangeSensor range = null;
     public ModernRoboticsI2cGyro gyro = null;
@@ -65,9 +76,9 @@ public class Hardware
             transInit();
         }
         */
-        color = hwMap.get(ColorSensor.class, "color_sensor");
-        range = hwMap.get(ModernRoboticsI2cRangeSensor.class, "range_sensor");
-        gyro = hwMap.get(ModernRoboticsI2cGyro.class, "gyro");
+        //color = hwMap.get(ColorSensor.class, "color_sensor");
+        //range = hwMap.get(ModernRoboticsI2cRangeSensor.class, "range_sensor");
+        //gyro = hwMap.get(ModernRoboticsI2cGyro.class, "gyro");
         mobInit();
     }
     //ShootInit Initializes the Shooting mechanism.
@@ -97,15 +108,25 @@ public class Hardware
 
     //MobInit Initializes the Motors specifically for testing the mobility of the robot
     public void mobInit(){
+        //leftGrabServo = hwMap.servo.get("L Grab");
+        //rightGrabServo = hwMap.servo.get("R Grab");
+        //railServo = hwMap.servo.get("Rail servo");
+        //handSpinServo = hwMap.servo.get("Hand spin");
+        //jDropServo = hwMap.servo.get("Jewel drop");
+        //jSlapServo = hwMap.servo.get("Jewel slap");
+
         leftMotorF = hwMap.dcMotor.get("Left motor");
         rightMotorF = hwMap.dcMotor.get("Right motor");
         leftMotorB = hwMap.dcMotor.get("Left motor 2");
         rightMotorB = hwMap.dcMotor.get("Right motor 2");
+        //raiseMotor = hwMap.dcMotor.get("Raise motor");
+        //armExtendMotor = hwMap.dcMotor.get("Extend motor");
+        //armLiftMotor = hwMap.dcMotor.get("Lift motor");
 
-        leftMotorF.setDirection(DcMotor.Direction.FORWARD); // Set to FORWARD if using AndyMark motors
-        rightMotorF.setDirection(DcMotor.Direction.REVERSE);// Set to REVERSE if using AndyMark motors
-        leftMotorB.setDirection(DcMotor.Direction.FORWARD); // Set to FORWARD if using AndyMark motors
-        rightMotorB.setDirection(DcMotor.Direction.REVERSE);// Set to REVERSE if using AndyMark motors
+        leftMotorF.setDirection(DcMotor.Direction.REVERSE);
+        rightMotorF.setDirection(DcMotor.Direction.FORWARD);
+        leftMotorB.setDirection(DcMotor.Direction.REVERSE);
+        rightMotorB.setDirection(DcMotor.Direction.FORWARD);
 
         leftMotorF.setPower(0);
         rightMotorF.setPower(0);
@@ -116,6 +137,9 @@ public class Hardware
         rightMotorF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftMotorB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotorB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //raiseMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //armExtendMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //armLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
     /*public void liftInit(){
         liftMotor  = hwMap.dcMotor.get("Lift motor");
