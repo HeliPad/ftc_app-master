@@ -57,11 +57,11 @@ public class DrivingMain extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     Hardware robot=new Hardware();
-    
+
     private int mod(int num, int div) {
         return num - (int)Math.floor((float)num/div)*div;
     }
-    
+
     private int angleDifference(int a1, int a2){
         return mod(a1 - a2 + 180, 360) - 180;
     }
@@ -75,7 +75,7 @@ public class DrivingMain extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-        
+
         //Zero the heading
         telemetry.addData("Status", "Calibrating the Gyro, Don't Move...");
         telemetry.update();
@@ -88,6 +88,8 @@ public class DrivingMain extends LinearOpMode {
         boolean grabbing = false;
 
         // run until the end of the match (driver presses STOP)
+        double rPos= .5;
+        double lPos= .5;
         while (opModeIsActive()) {
             double rfPower, rbPower, lfPower, lbPower;
             double xl = gamepad1.left_stick_x, yl = -gamepad1.left_stick_y; //moving thumbstick up results in -y value
@@ -145,7 +147,7 @@ public class DrivingMain extends LinearOpMode {
                 lfPower /= max;
                 lbPower /= max;
             }
-            
+
             //For testing (looks fine)
             telemetry.addData("Status", "Right F Motor: " + rfPower);
             telemetry.addData("Status", "Right B Motor: " + rbPower);
@@ -164,16 +166,40 @@ public class DrivingMain extends LinearOpMode {
             //open and close grabber
             if (gamepad2.a && !pressed[2]) {
                 grabbing = !grabbing;
-                robot.leftGrabServo.setPosition(grabbing ? 90 : 80);
-                robot.rightGrabServo.setPosition(grabbing ? 90 : 100);
+                robot.leftGrabServo.setPosition(grabbing ? .647 : .4);
+                robot.rightGrabServo.setPosition(grabbing ? .529 : .776);
                 pressed[2] = true;
             } else if (!gamepad2.a) {
                 pressed[2] = false;
             }
-            
+            double modifier=.01;
+            if(gamepad2.right_stick_x !=0){
+                rPos+=modifier*gamepad2.right_stick_x;
+                if(rPos<0){
+                    rPos=0;
+                }
+                else if(rPos>1){
+                    rPos=1;
+                }
+                robot.rightGrabServo.setPosition(rPos);
+
+            }
+            if(gamepad2.left_stick_x!=0){
+                lPos+=modifier*gamepad2.left_stick_x;
+                if(lPos<0){
+                    lPos=0;
+                }
+                else if(lPos>1){
+                    lPos=1;
+                }
+                robot.leftGrabServo.setPosition(lPos);
+            }
+            telemetry.addData("Status: ", "Left Servo Position: " + lPos);
+            telemetry.addData("Status: ", "Right Servo Position: " + rPos);
+
             //Moving glyph rack and pinion
             robot.glyphMotor.setPower(-gamepad2.right_stick_y/2);
-            
+
             idle();
         }
     }

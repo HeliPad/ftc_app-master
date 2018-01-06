@@ -90,8 +90,8 @@ public class Hardware
         raiseMotor.setDirection(DcMotor.Direction.REVERSE);
         glyphMotor.setDirection(DcMotor.Direction.REVERSE);
         
-        leftGrabServo.setPosition(.9);
-        rightGrabServo.setPosition(.1);
+        leftGrabServo.setPosition(.08);
+        rightGrabServo.setPosition(1);
         jDropServo.setPosition(0);
         leftMotorF.setPower(0);
         rightMotorF.setPower(0);
