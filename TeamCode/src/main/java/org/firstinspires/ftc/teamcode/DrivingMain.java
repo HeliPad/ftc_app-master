@@ -83,8 +83,9 @@ public class DrivingMain extends LinearOpMode {
         telemetry.addData("Status", "Calibration Finished!");
         telemetry.update();
 
-        boolean[] pressed = new boolean[2];
+        boolean[] pressed = new boolean[3];
         boolean omniMode = true;
+        boolean grabbing = false;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -158,10 +159,20 @@ public class DrivingMain extends LinearOpMode {
             robot.leftMotorF.setPower(lfPower);
             robot.leftMotorB.setPower(lbPower);
 
-            //robot.raiseMotor.setPower((gamepad2.y ? 1 : 0) - (gamepad2.a ? 1 : 0));
+            robot.raiseMotor.setPower((gamepad2.dpad_up ? 1 : 0) - (gamepad2.dpad_down ? 1 : 0));
 
-            //robot.armLiftMotor.setPower(gamepad2.left_stick_y);
-            //robot.armExtendMotor.setPower(gamepad2.right_stick_y);
+            //open and close grabber
+            if (gamepad2.a && !pressed[2]) {
+                grabbing = !grabbing;
+                robot.leftGrabServo.setPosition(grabbing ? 90 : 80);
+                robot.rightGrabServo.setPosition(grabbing ? 90 : 100);
+                pressed[2] = true;
+            } else if (!gamepad2.a) {
+                pressed[2] = false;
+            }
+            
+            //Moving glyph rack and pinion
+            robot.glyphMotor.setPower(-gamepad2.right_stick_y/2);
             
             idle();
         }

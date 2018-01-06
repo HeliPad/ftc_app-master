@@ -149,15 +149,11 @@ public class Auto extends LinearOpMode {
 
         // Sets color sensor to active mode (for reading objects that aren't light sources) 
         robot.color.enableLed(true);
-
-        // Extend Bar (might need encoders)
-        while(opModeIsActive() /*&& motor distance < #*/){
-            //turn on motor that extends bar
-            idle();
-        }
-        // turn off motor that extends bar
-
-        sleep(200); // Gives motor time to stop
+        //turn on servo that drops bar
+        
+        robot.jDropServo.setPosition(.5);
+        
+        sleep(200); // Gives servo time to stop
 
         // Color Sensor stuff:
         // Get the red and blue values from RGB
@@ -181,12 +177,10 @@ public class Auto extends LinearOpMode {
                 
             }
         }
-        // Retract bar (when motor has turned a certain distance, start driving off platform)
-        while(opModeIsActive() /*&& motor distance < #*/){
-            // turn on motor that controls bar
-            idle();
-        }
-        // turn off motor
+        
+        // Retract servo
+        robot.jDropServo.setPosition(0);
+        sleep(200); //gives time for servo to retract
         // Turn robot if class that calls object is R2 or B2
         if(doTurn){
             reOrient(.5,0,0,0,0, false, (isBlue ? 270 : 90));
@@ -213,7 +207,7 @@ public class Auto extends LinearOpMode {
             }
             setMotorP(0, 0, 0, 0);
             
-            // Moves robot so it's consistenly 15 cm. from wall
+            // Moves robot so it's consistently 15 cm. from wall
             if(robot.range.getDistance(DistanceUnit.CM)>15){
                 setMotorP(.2, .2, .2, .2);
                 while(robot.range.getDistance(DistanceUnit.CM)>15){

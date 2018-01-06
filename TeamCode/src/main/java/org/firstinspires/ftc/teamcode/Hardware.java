@@ -38,14 +38,13 @@ public class Hardware
     public DcMotor leftMotorB = null;
     public DcMotor rightMotorB = null;
     public DcMotor raiseMotor = null;
-    public DcMotor armExtendMotor = null;
-    public DcMotor armLiftMotor = null;
+    public DcMotor glyphMotor = null;
 
-    public Servo leftGrabServo = null;
+    public Servo leftGrabServo = null; //For arm
     public Servo rightGrabServo = null;
-    public Servo railServo = null;
-    public Servo handSpinServo = null;
-    //public Servo jDropServo = null;
+    //public Servo railServo = null;
+    //public Servo handSpinServo = null;
+    public Servo jDropServo = null;
     public Servo jSlapServo = null;
 
     public ColorSensor color = null;
@@ -66,91 +65,51 @@ public class Hardware
 
         // Save reference to Hardware map
         hwMap = ahwMap;
-        /*
-        //calls method(s) that initialize only the motors being used in order to avoid errors
-        if (className.equals("ShooterTestOpMode_Linear"))
-            shootInit();
-        else {
-            shootInit();
-            mobInit();
-            transInit();
-        }
-        */
+        
         //color = hwMap.get(ColorSensor.class, "color_sensor");
         //range = hwMap.get(ModernRoboticsI2cRangeSensor.class, "range_sensor");
         //gyro = hwMap.get(ModernRoboticsI2cGyro.class, "gyro");
-        mobInit();
-    }
-    //ShootInit Initializes the Shooting mechanism.
-    /*public void shootInit(){
-        shootMotor = hwMap.dcMotor.get("Shoot motor");
-        shootMotor.setDirection(DcMotor.Direction.FORWARD);
-        shootMotor.setPower(0);
-        shootMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        shootServo=hwMap.servo.get("Shoot servo");
-        shootServo.setDirection(Servo.Direction.FORWARD);
-        shootServo.setPosition(.68);
-
-        gateServo=hwMap.servo.get("Gate servo");
-        gateServo.setDirection(Servo.Direction.FORWARD);
-        gateServo.setPosition(.97);
-
-    }*/
-
-    //Initializes the motors specifically for transporting the ball up to the shooting mechanism
-    /*public void transInit(){
-        sweepMotor  = hwMap.dcMotor.get("Sweep motor");
-        sweepMotor.setDirection(DcMotor.Direction.FORWARD);
-        sweepMotor.setPower(0);
-        sweepMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }*/
-
-    //MobInit Initializes the Motors specifically for testing the mobility of the robot
-    public void mobInit(){
-        //leftGrabServo = hwMap.servo.get("L Grab");
-        //rightGrabServo = hwMap.servo.get("R Grab");
+        
+        leftGrabServo = hwMap.servo.get("L Grab");
+        rightGrabServo = hwMap.servo.get("R Grab");
         //railServo = hwMap.servo.get("Rail servo");
-        //handSpinServo = hwMap.servo.get("Hand spin");
-        //jDropServo = hwMap.servo.get("Jewel drop");
-        //jSlapServo = hwMap.servo.get("Jewel slap");
+        jDropServo = hwMap.servo.get("Jewel drop");
+        jSlapServo = hwMap.servo.get("Jewel slap");
 
         leftMotorF = hwMap.dcMotor.get("Left motor");
         rightMotorF = hwMap.dcMotor.get("Right motor");
         leftMotorB = hwMap.dcMotor.get("Left motor 2");
         rightMotorB = hwMap.dcMotor.get("Right motor 2");
-        //raiseMotor = hwMap.dcMotor.get("Raise motor");
-        //armExtendMotor = hwMap.dcMotor.get("Extend motor");
-        //armLiftMotor = hwMap.dcMotor.get("Lift motor");
+        raiseMotor = hwMap.dcMotor.get("Raise motor");
+        glyphMotor = hwMap.dcMotor.get("Glyph motor");
 
         leftMotorF.setDirection(DcMotor.Direction.REVERSE);
         rightMotorF.setDirection(DcMotor.Direction.FORWARD);
         leftMotorB.setDirection(DcMotor.Direction.REVERSE);
         rightMotorB.setDirection(DcMotor.Direction.FORWARD);
-
+        raiseMotor.setDirection(DcMotor.Direction.REVERSE);
+        glyphMotor.setDirection(DcMotor.Direction.REVERSE);
+        
+        leftGrabServo.setPosition(.9);
+        rightGrabServo.setPosition(.1);
+        jDropServo.setPosition(0);
         leftMotorF.setPower(0);
         rightMotorF.setPower(0);
         leftMotorB.setPower(0);
         rightMotorB.setPower(0);
+        raiseMotor.setPower(0);
+        glyphMotor.setPower(0);
 
         leftMotorF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotorF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftMotorB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotorB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //raiseMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        raiseMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        glyphMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //armExtendMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //armLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    /*public void liftInit(){
-        liftMotor  = hwMap.dcMotor.get("Lift motor");
-        liftMotor.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-        liftMotor.setPower(0);
-        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        liftServo=hwMap.servo.get("Lift servo 1");
-        liftServo.setDirection(Servo.Direction.FORWARD);
-        liftServo.setPosition(.5);
-    }*/
+    
 
     /***
      *
