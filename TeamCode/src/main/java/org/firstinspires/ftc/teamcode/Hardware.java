@@ -92,8 +92,8 @@ public class Hardware
         raiseMotor.setDirection(DcMotor.Direction.REVERSE);
         relicMotor.setDirection(DcMotor.Direction.REVERSE);
         
-        leftGrabServo.setPosition(.08);
-        rightGrabServo.setPosition(1);
+        leftGrabServo.setPosition(.2583);
+        rightGrabServo.setPosition(.962);
         jDropServo.setPosition(.7103);
         jSlapServo.setPosition(.2671);
         relicServo.setPosition(.5);
