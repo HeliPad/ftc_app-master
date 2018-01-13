@@ -46,7 +46,7 @@ public class Hardware
     //public Servo handSpinServo = null;
     public Servo jDropServo = null;
     public Servo jSlapServo = null;
-    public Servp relicServo = null;
+    public Servo relicServo = null;
 
     public ColorSensor color = null;
     public ModernRoboticsI2cRangeSensor range = null;
