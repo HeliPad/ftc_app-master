@@ -61,7 +61,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //fall back Autonomous Program
 
 
-//@Autonomous(name="Half Autonomous", group="AutoTesting")  // @Autonomous(...) is the other common choice
+@Autonomous(name="Half Autonomous", group="Automus")  // @Autonomous(...) is the other common choice
 public class HalfAutonomous extends LinearOpMode {
 
 
@@ -77,24 +77,18 @@ public class HalfAutonomous extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-
-        //robot.init(hardwareMap, getClass().getSimpleName());
-
+        robot.init(hardwareMap);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-        robot.leftMotorF.setPower(-1);
-        robot.leftMotorB.setPower(-1);
-        while (opModeIsActive() && runtime.seconds() <= 0.02) {
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.update();
-            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
-        }
-        robot.rightMotorF.setPower(-1);
-        robot.rightMotorB.setPower(-1);
+        robot.leftMotorF.setPower(.2);
+        robot.leftMotorB.setPower(.2);
+        robot.rightMotorF.setPower(.2);
+        robot.rightMotorB.setPower(.2);
+
         // run until the end of the match (driver presses STOP)
-        while (opModeIsActive() && runtime.seconds() <= 0.9) {
+        while (opModeIsActive() && runtime.seconds() <= 0.7) {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
@@ -103,6 +97,7 @@ public class HalfAutonomous extends LinearOpMode {
         robot.rightMotorF.setPower(0);
         robot.leftMotorB.setPower(0);
         robot.rightMotorB.setPower(0);
+        /*
         //robot.shootMotor.setPower(-1);
         //robot.sweepCMotor.setPower(1);
         while(opModeIsActive() && runtime.seconds()<=9.9){
@@ -116,6 +111,7 @@ public class HalfAutonomous extends LinearOpMode {
             telemetry.update();
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
+        */
         //robot.shootServo.setPosition(.68);
         //robot.shootMotor.setPower(0);
     }

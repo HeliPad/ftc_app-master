@@ -84,10 +84,11 @@ public class DrivingMain extends LinearOpMode {
         telemetry.update();*/
 
         boolean[] pressed = new boolean[5];
-        boolean omniMode = true;
+        boolean omniMode = false;
         boolean grabbing = false;
         boolean relicGrabbing = false;
         boolean relicFlip = false;
+        double mod = 0.5;
 
         // run until the end of the match (driver presses STOP)
         double rPos= .5;
@@ -151,24 +152,24 @@ public class DrivingMain extends LinearOpMode {
             }
 
             //For testing (looks fine)
-            telemetry.addData("Status", "Right F Motor: " + rfPower);
-            telemetry.addData("Status", "Right B Motor: " + rbPower);
-            telemetry.addData("Status", "Left F Motor: " + lfPower);
-            telemetry.addData("Status", "Left B Motor: " + lbPower);
+            telemetry.addData("Status", "Right F Motor: " + rfPower*mod);
+            telemetry.addData("Status", "Right B Motor: " + rbPower*mod);
+            telemetry.addData("Status", "Left F Motor: " + lfPower*mod);
+            telemetry.addData("Status", "Left B Motor: " + lbPower*mod);
             telemetry.addData("Status", "OmniMode: " + (omniMode ? "On" : "Off"));
             telemetry.update();
 
-            robot.rightMotorF.setPower(rfPower);
-            robot.rightMotorB.setPower(rbPower);
-            robot.leftMotorF.setPower(lfPower);
-            robot.leftMotorB.setPower(lbPower);
+            robot.rightMotorF.setPower(rfPower*mod);
+            robot.rightMotorB.setPower(rbPower*mod);
+            robot.leftMotorF.setPower(lfPower*mod);
+            robot.leftMotorB.setPower(lbPower*mod);
 
             robot.raiseMotor.setPower((gamepad2.dpad_up ? 1 : 0) - (gamepad2.dpad_down ? 1 : 0));
 
             //open and close grabber
             if (gamepad2.a && !pressed[2]) {
                 grabbing = !grabbing;
-                robot.leftGrabServo.setPosition(grabbing ? .808 : .472);
+                robot.leftGrabServo.setPosition(grabbing ? .808 : .422); //originally .472
                 robot.rightGrabServo.setPosition(grabbing ? .4806 : .731);
                 pressed[2] = true;
             } else if (!gamepad2.a) {
