@@ -38,7 +38,7 @@ public class Hardware
     public DcMotor leftMotorB = null;
     public DcMotor rightMotorB = null;
     public DcMotor raiseMotor = null;
-    public DcMotor glyphMotor = null;
+    public DcMotor relicMotor = null;
 
     public Servo leftGrabServo = null; //For arm
     public Servo rightGrabServo = null;
@@ -46,6 +46,7 @@ public class Hardware
     //public Servo handSpinServo = null;
     public Servo jDropServo = null;
     public Servo jSlapServo = null;
+    public Servp relicServo = null;
 
     public ColorSensor color = null;
     public ModernRoboticsI2cRangeSensor range = null;
@@ -75,20 +76,21 @@ public class Hardware
         //railServo = hwMap.servo.get("Rail servo");
         jDropServo = hwMap.servo.get("Jewel drop");
         jSlapServo = hwMap.servo.get("Jewel slap");
+        relicServo = hwMap.servo.get("Relic")
 
         leftMotorF = hwMap.dcMotor.get("Left motor");
         rightMotorF = hwMap.dcMotor.get("Right motor");
         leftMotorB = hwMap.dcMotor.get("Left motor 2");
         rightMotorB = hwMap.dcMotor.get("Right motor 2");
         raiseMotor = hwMap.dcMotor.get("Raise motor");
-        glyphMotor = hwMap.dcMotor.get("Glyph motor");
+        relicMotor = hwMap.dcMotor.get("Relic motor");
 
         leftMotorF.setDirection(DcMotor.Direction.REVERSE);
         rightMotorF.setDirection(DcMotor.Direction.FORWARD);
         leftMotorB.setDirection(DcMotor.Direction.REVERSE);
         rightMotorB.setDirection(DcMotor.Direction.FORWARD);
         raiseMotor.setDirection(DcMotor.Direction.REVERSE);
-        glyphMotor.setDirection(DcMotor.Direction.REVERSE);
+        relicMotor.setDirection(DcMotor.Direction.REVERSE);
         
         leftGrabServo.setPosition(.08);
         rightGrabServo.setPosition(1);
@@ -99,14 +101,14 @@ public class Hardware
         leftMotorB.setPower(0);
         rightMotorB.setPower(0);
         raiseMotor.setPower(0);
-        glyphMotor.setPower(0);
+        relicMotor.setPower(0);
 
         leftMotorF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotorF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftMotorB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotorB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         raiseMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        glyphMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        relicMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //armExtendMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //armLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
