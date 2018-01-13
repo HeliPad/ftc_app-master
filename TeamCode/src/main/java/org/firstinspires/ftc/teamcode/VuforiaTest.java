@@ -65,6 +65,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp(name="Vuforia Test", group="Linear Opmode")
 public class VuforiaTest extends LinearOpMode {
    
+    private ElapsedTime runtime = new ElapsedTime();
+    
     @Override
     public void runOpMode() {
         VuforiaLocalizer vuforia;
