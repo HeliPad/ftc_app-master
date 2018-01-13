@@ -161,20 +161,21 @@ public class Auto extends LinearOpMode {
         blue=robot.color.blue();
         if(red>blue){
             // hit ball based on alliance
+            
             if(isBlue){
-                
+                //Hit ball facing Color Sensor
             }
             else{
-                
+                //hit ball opposing Color Sensor
             }
         }
         else if(blue>red){
             // hit ball based on alliance
             if(isBlue){
-                
+                //Hit ball opposing Color Sensor
             }
             else{
-                
+                //Hit ball facing Color Sensor
             }
         }
         
@@ -191,6 +192,7 @@ public class Auto extends LinearOpMode {
         }
         else if(!isBlue){
             setMotorP(.1, -.1, -.1, .1);
+            
         }
         else{
             setMotorP(-.1, .1, .1, -.1);
