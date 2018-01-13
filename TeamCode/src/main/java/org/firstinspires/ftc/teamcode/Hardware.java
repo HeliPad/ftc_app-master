@@ -96,7 +96,7 @@ public class Hardware
         rightGrabServo.setPosition(1);
         jDropServo.setPosition(.7103);
         jSlapServo.setPosition(.2671);
-        relicServo.setDirection(.5);
+        relicServo.setPosition(.5);
         leftMotorF.setPower(0);
         rightMotorF.setPower(0);
         leftMotorB.setPower(0);
