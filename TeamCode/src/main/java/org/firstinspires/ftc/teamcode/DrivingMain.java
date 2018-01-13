@@ -79,7 +79,7 @@ public class DrivingMain extends LinearOpMode {
         //Zero the heading
         telemetry.addData("Status", "Calibrating the Gyro, Don't Move...");
         telemetry.update();
-        //robot.gyro.calibrate();
+        robot.gyro.calibrate();
         telemetry.addData("Status", "Calibration Finished!");
         telemetry.update();
 
