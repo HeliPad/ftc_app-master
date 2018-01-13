@@ -83,9 +83,10 @@ public class DrivingMain extends LinearOpMode {
         telemetry.addData("Status", "Calibration Finished!");
         telemetry.update();
 
-        boolean[] pressed = new boolean[3];
+        boolean[] pressed = new boolean[4];
         boolean omniMode = true;
         boolean grabbing = false;
+        boolean relicGrabbing = false
 
         // run until the end of the match (driver presses STOP)
         double rPos= .5;
@@ -172,6 +173,16 @@ public class DrivingMain extends LinearOpMode {
             } else if (!gamepad2.a) {
                 pressed[2] = false;
             }
+            
+            //open and close relic grabber
+            if (gamepad2.y && !pressed[3]) {
+                relicGrabbing = !relicGrabbing;
+                robot.relicServo.setPosition(relicGrabbing ? .8 : .5);
+                pressed[3] = true;
+            } else if (!gamepad2.y) {
+                pressed[3] = false;
+            }
+            
             double modifier=.01;
             if(gamepad2.right_stick_x !=0){
                 rPos+=modifier*gamepad2.right_stick_x;
@@ -198,7 +209,7 @@ public class DrivingMain extends LinearOpMode {
             telemetry.addData("Status: ", "Jewel Drop Servo Position: " + rPos);
 
             //Moving glyph rack and pinion
-            robot.glyphMotor.setPower(-gamepad2.right_stick_y/2);
+            robot.relicMotor.setPower(-gamepad2.right_stick_y/2);
 
             idle();
         }

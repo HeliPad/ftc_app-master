@@ -76,7 +76,7 @@ public class Hardware
         //railServo = hwMap.servo.get("Rail servo");
         jDropServo = hwMap.servo.get("Jewel drop");
         jSlapServo = hwMap.servo.get("Jewel slap");
-        relicServo = hwMap.servo.get("Relic")
+        relicServo = hwMap.servo.get("Relic");
 
         leftMotorF = hwMap.dcMotor.get("Left motor");
         rightMotorF = hwMap.dcMotor.get("Right motor");
@@ -96,6 +96,7 @@ public class Hardware
         rightGrabServo.setPosition(1);
         jDropServo.setPosition(.7103);
         jSlapServo.setPosition(.2671);
+        relicServo.setDirection(.5);
         leftMotorF.setPower(0);
         rightMotorF.setPower(0);
         leftMotorB.setPower(0);

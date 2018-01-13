@@ -180,8 +180,8 @@ public class Auto extends LinearOpMode {
         }
         
         // Retract servo
-        jDropServo.setPosition(.7103);
-        jSlapServo.setPosition(.2671);
+        robot.jDropServo.setPosition(.7103);
+        robot.jSlapServo.setPosition(.2671);
         sleep(200); //gives time for servo to retract
         // Turn robot if class that calls object is R2 or B2
         if(doTurn){
