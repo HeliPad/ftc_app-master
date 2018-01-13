@@ -167,8 +167,8 @@ public class DrivingMain extends LinearOpMode {
             //open and close grabber
             if (gamepad2.a && !pressed[2]) {
                 grabbing = !grabbing;
-                robot.leftGrabServo.setPosition(grabbing ? .647 : .4);
-                robot.rightGrabServo.setPosition(grabbing ? .529 : .776);
+                robot.leftGrabServo.setPosition(grabbing ? .808 : .472);
+                robot.rightGrabServo.setPosition(grabbing ? .4806 : .731);
                 pressed[2] = true;
             } else if (!gamepad2.a) {
                 pressed[2] = false;
