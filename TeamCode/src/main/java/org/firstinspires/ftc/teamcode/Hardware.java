@@ -39,6 +39,7 @@ public class Hardware
     public DcMotor rightMotorB = null;
     public DcMotor raiseMotor = null;
     public DcMotor relicMotor = null;
+    public DcMotor leanMotor = null;
 
     public Servo leftGrabServo = null; //For arm
     public Servo rightGrabServo = null;
@@ -47,6 +48,7 @@ public class Hardware
     public Servo jDropServo = null;
     public Servo jSlapServo = null;
     public Servo relicServo = null;
+    public Servo flipServo = null;
 
     public ColorSensor color = null;
     public ModernRoboticsI2cRangeSensor range = null;
@@ -77,6 +79,7 @@ public class Hardware
         jDropServo = hwMap.servo.get("Jewel drop");
         jSlapServo = hwMap.servo.get("Jewel slap");
         relicServo = hwMap.servo.get("Relic");
+        flipServo = hwMap.servo.get("Flip");
 
         leftMotorF = hwMap.dcMotor.get("Left motor");
         rightMotorF = hwMap.dcMotor.get("Right motor");
@@ -84,6 +87,7 @@ public class Hardware
         rightMotorB = hwMap.dcMotor.get("Right motor 2");
         raiseMotor = hwMap.dcMotor.get("Raise motor");
         relicMotor = hwMap.dcMotor.get("Relic motor");
+        leanMotor = hwMap.dcMotor.get("Lean motor");
 
         leftMotorF.setDirection(DcMotor.Direction.REVERSE);
         rightMotorF.setDirection(DcMotor.Direction.FORWARD);
@@ -91,18 +95,23 @@ public class Hardware
         rightMotorB.setDirection(DcMotor.Direction.FORWARD);
         raiseMotor.setDirection(DcMotor.Direction.REVERSE);
         relicMotor.setDirection(DcMotor.Direction.REVERSE);
+        leanMotor.setDirection(DcMotor.Direction.REVERSE);
         
         leftGrabServo.setPosition(.2583);
         rightGrabServo.setPosition(.962);
         jDropServo.setPosition(.7103);
         jSlapServo.setPosition(.2671);
         relicServo.setPosition(.5);
+        flipServo.setPosition(.5);
+        
         leftMotorF.setPower(0);
         rightMotorF.setPower(0);
         leftMotorB.setPower(0);
         rightMotorB.setPower(0);
         raiseMotor.setPower(0);
         relicMotor.setPower(0);
+        leanMotor.setPower(0);
+        
 
         leftMotorF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotorF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -110,6 +119,7 @@ public class Hardware
         rightMotorB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         raiseMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         relicMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leanMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //armExtendMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //armLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }

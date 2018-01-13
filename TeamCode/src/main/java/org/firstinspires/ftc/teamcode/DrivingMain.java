@@ -83,10 +83,11 @@ public class DrivingMain extends LinearOpMode {
         telemetry.addData("Status", "Calibration Finished!");
         telemetry.update();
 
-        boolean[] pressed = new boolean[4];
+        boolean[] pressed = new boolean[5];
         boolean omniMode = true;
         boolean grabbing = false;
         boolean relicGrabbing = false;
+        boolean relicFlip = false
 
         // run until the end of the match (driver presses STOP)
         double rPos= .5;
@@ -105,7 +106,7 @@ public class DrivingMain extends LinearOpMode {
             }
             //Reorients Robot (see reOrient() for more info.)
             if (gamepad1.y && !pressed[1]) {
-                //reOrient();
+                reOrient();
                 pressed[1] = true;
             } else if (!gamepad1.y) {
                 pressed[1] = false;
@@ -183,6 +184,15 @@ public class DrivingMain extends LinearOpMode {
                 pressed[3] = false;
             }
             
+            //toggle relic flip servo
+            if (gamepad2.x && !pressed[4]) {
+                relicGrabbing = !relicGrabbing;
+                robot.relicFlip.setPosition(relicFlip ? .8 : .5);
+                pressed[4] = true;
+            } else if (!gamepad2.x) {
+                pressed[4] = false;
+            }
+            
             double modifier=.01;
             if(gamepad2.right_stick_x !=0){
                 rPos+=modifier*gamepad2.right_stick_x;
@@ -216,7 +226,7 @@ public class DrivingMain extends LinearOpMode {
     }
 
     //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
-    /*private void reOrient() {
+    private void reOrient() {
         int curHeading = robot.gyro.getHeading();
         //target heading is from 0-360 (0,90,180,270,360)
         int targetHeading = (int)(curHeading/90.0 + 0.5) * 90;
@@ -247,7 +257,7 @@ public class DrivingMain extends LinearOpMode {
         robot.leftMotorB.setPower(0);
         telemetry.addData("Status","Done!");
         telemetry.update();
-    }*/
+    }
 }
 //https://gist.github.com/jboulhous/6007980
 
