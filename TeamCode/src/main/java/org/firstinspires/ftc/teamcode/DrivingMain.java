@@ -192,7 +192,7 @@ public class DrivingMain extends LinearOpMode {
                 else if(rPos>1){
                     rPos=1;
                 }
-                robot.jDropServo.setPosition(rPos);
+                robot.rightGrabServo.setPosition(rPos);
 
             }
             if(gamepad2.left_stick_x!=0){
@@ -203,10 +203,10 @@ public class DrivingMain extends LinearOpMode {
                 else if(lPos>1){
                     lPos=1;
                 }
-                robot.jSlapServo.setPosition(lPos);
+                robot.leftGrabServo.setPosition(lPos);
             }
-            telemetry.addData("Status: ", "Jewel Slap Servo Position: " + lPos);
-            telemetry.addData("Status: ", "Jewel Drop Servo Position: " + rPos);
+            telemetry.addData("Status: ", "Left Grab Servo Position: " + lPos);
+            telemetry.addData("Status: ", "Right Grab Servo Position " + rPos);
 
             //Moving glyph rack and pinion
             robot.relicMotor.setPower(-gamepad2.right_stick_y/2);
