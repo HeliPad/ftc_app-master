@@ -86,7 +86,7 @@ public class DrivingMain extends LinearOpMode {
         boolean[] pressed = new boolean[4];
         boolean omniMode = true;
         boolean grabbing = false;
-        boolean relicGrabbing = false
+        boolean relicGrabbing = false;
 
         // run until the end of the match (driver presses STOP)
         double rPos= .5;
