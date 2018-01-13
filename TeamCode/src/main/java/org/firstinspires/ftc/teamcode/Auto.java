@@ -341,7 +341,7 @@ public class Auto extends LinearOpMode {
 
     // Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
     private void reOrient(double power, double rf, double rb, double lf, double lb, boolean step, int targetHeading){
-        float curHeading = (float)robot.gyro.getHeading();
+        int curHeading = robot.gyro.getHeading();
 
         // Turns robot towards Target Heading
         if(curHeading!=targetHeading){
@@ -354,15 +354,17 @@ public class Auto extends LinearOpMode {
 
             }
         }
+        curHeading = robot.gyro.getHeading();
         if(step){
-            if(robot.gyro.getHeading()!=targetHeading){
+            if(curHeading!=targetHeading){
                 return;
             }
         }
         else{
             // when the loop breaks, the robot is at the targetHeading
-            while (robot.gyro.getHeading() != targetHeading)
+            while (curHeading != targetHeading)
             {
+                curHeading = robot.gyro.getHeading();
                 telemetry.addData("Status", "Reorienting... Please Wait...");
                 telemetry.update();
             }

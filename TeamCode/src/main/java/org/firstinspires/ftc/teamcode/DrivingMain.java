@@ -87,7 +87,7 @@ public class DrivingMain extends LinearOpMode {
         boolean omniMode = true;
         boolean grabbing = false;
         boolean relicGrabbing = false;
-        boolean relicFlip = false
+        boolean relicFlip = false;
 
         // run until the end of the match (driver presses STOP)
         double rPos= .5;
@@ -187,7 +187,7 @@ public class DrivingMain extends LinearOpMode {
             //toggle relic flip servo
             if (gamepad2.x && !pressed[4]) {
                 relicGrabbing = !relicGrabbing;
-                robot.relicFlip.setPosition(relicFlip ? .8 : .5);
+                robot.flipServo.setPosition(relicFlip ? .8 : .5);
                 pressed[4] = true;
             } else if (!gamepad2.x) {
                 pressed[4] = false;
@@ -228,6 +228,8 @@ public class DrivingMain extends LinearOpMode {
     //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
     private void reOrient() {
         int curHeading = robot.gyro.getHeading();
+        telemetry.addData("Heading", curHeading);
+        telemetry.update();
         //target heading is from 0-360 (0,90,180,270,360)
         int targetHeading = (int)(curHeading/90.0 + 0.5) * 90;
         
@@ -246,8 +248,10 @@ public class DrivingMain extends LinearOpMode {
                 robot.leftMotorB.setPower(.5);
         }
         //when the loop breaks, the robot is at the targetHeading
-        while (robot.gyro.getHeading() != (targetHeading==360 ? 0 : targetHeading))
+        curHeading = robot.gyro.getHeading();
+        while (curHeading != (targetHeading==360 ? 0 : targetHeading))
         {
+            curHeading = robot.gyro.getHeading();
             telemetry.addData("Status", "Reorienting... Please Wait...");
             telemetry.update();
         }
