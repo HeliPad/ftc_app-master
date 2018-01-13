@@ -149,8 +149,8 @@ public class Auto extends LinearOpMode {
 
         // Sets color sensor to active mode (for reading objects that aren't light sources) 
         robot.color.enableLed(true);
-        //turn on servo that drops bar
-        
+        //turn on servo that drops bar (test for optimal positions)
+        robot.jSlapServo.setPosition(.4);
         robot.jDropServo.setPosition(.5);
         
         sleep(200); // Gives servo time to stop
@@ -180,7 +180,8 @@ public class Auto extends LinearOpMode {
         }
         
         // Retract servo
-        robot.jDropServo.setPosition(0);
+        jDropServo.setPosition(.7103);
+        jSlapServo.setPosition(.2671);
         sleep(200); //gives time for servo to retract
         // Turn robot if class that calls object is R2 or B2
         if(doTurn){

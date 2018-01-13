@@ -75,9 +75,6 @@ public class Hardware
         //railServo = hwMap.servo.get("Rail servo");
         jDropServo = hwMap.servo.get("Jewel drop");
         jSlapServo = hwMap.servo.get("Jewel slap");
-        
-        //Drop: .7103
-        //Slap: .2671
 
         leftMotorF = hwMap.dcMotor.get("Left motor");
         rightMotorF = hwMap.dcMotor.get("Right motor");
