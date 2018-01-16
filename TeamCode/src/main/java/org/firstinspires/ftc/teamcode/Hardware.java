@@ -69,9 +69,9 @@ public class Hardware
         // Save reference to Hardware map
         hwMap = ahwMap;
         
-        //color = hwMap.get(ColorSensor.class, "color_sensor");
-        //range = hwMap.get(ModernRoboticsI2cRangeSensor.class, "range_sensor");
-        //gyro = hwMap.get(ModernRoboticsI2cGyro.class, "gyro");
+        color = hwMap.get(ColorSensor.class, "color_sensor");
+        range = hwMap.get(ModernRoboticsI2cRangeSensor.class, "range_sensor");
+        gyro = hwMap.get(ModernRoboticsI2cGyro.class, "gyro");
         
         leftGrabServo = hwMap.servo.get("L Grab");
         rightGrabServo = hwMap.servo.get("R Grab");

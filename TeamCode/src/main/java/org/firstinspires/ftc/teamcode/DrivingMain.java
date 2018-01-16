@@ -77,11 +77,11 @@ public class DrivingMain extends LinearOpMode {
         runtime.reset();
 
         //Zero the heading
-        /*telemetry.addData("Status", "Calibrating the Gyro, Don't Move...");
+        telemetry.addData("Status", "Calibrating the Gyro, Don't Move...");
         telemetry.update();
         robot.gyro.calibrate();
         telemetry.addData("Status", "Calibration Finished!");
-        telemetry.update();*/
+        telemetry.update();
 
         boolean[] pressed = new boolean[5];
         boolean omniMode = false;
@@ -107,7 +107,7 @@ public class DrivingMain extends LinearOpMode {
             }
             //Reorients Robot (see reOrient() for more info.)
             if (gamepad1.y && !pressed[1]) {
-                //reOrient();
+                reOrient();
                 pressed[1] = true;
             } else if (!gamepad1.y) {
                 pressed[1] = false;
@@ -227,7 +227,7 @@ public class DrivingMain extends LinearOpMode {
     }
 
     //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
-    /*private void reOrient() {
+    private void reOrient() {
         int curHeading = robot.gyro.getHeading();
         telemetry.addData("Heading", curHeading);
         telemetry.update();
@@ -262,7 +262,7 @@ public class DrivingMain extends LinearOpMode {
         robot.leftMotorB.setPower(0);
         telemetry.addData("Status","Done!");
         telemetry.update();
-    }*/
+    }
 }
 //https://gist.github.com/jboulhous/6007980
 
