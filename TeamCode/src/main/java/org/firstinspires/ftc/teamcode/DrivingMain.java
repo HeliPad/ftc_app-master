@@ -71,17 +71,19 @@ public class DrivingMain extends LinearOpMode {
         robot.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
-        runtime.reset();
-
+        
         //Zero the heading
         telemetry.addData("Status", "Calibrating the Gyro, Don't Move...");
         telemetry.update();
         robot.gyro.calibrate();
         telemetry.addData("Status", "Calibration Finished!");
         telemetry.update();
+
+        // Wait for the game to start (driver presses PLAY)
+        waitForStart();
+        runtime.reset();
+
+        //Zero the heading
 
         boolean[] pressed = new boolean[5];
         boolean omniMode = false;
