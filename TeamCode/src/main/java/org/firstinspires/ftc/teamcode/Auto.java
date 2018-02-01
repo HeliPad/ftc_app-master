@@ -152,7 +152,7 @@ public class Auto extends LinearOpMode {
         robot.rightGrabServo.setPosition(.4806);
         
         robot.raiseMotor.setPower(1);
-        sleep(500)
+        sleep(500);
         robot.raiseMotor.setPower(0);
 
         // Sets color sensor to active mode (for reading objects that aren't light sources) 
@@ -303,29 +303,29 @@ public class Auto extends LinearOpMode {
             //tempBlue: the robot goes from left to right when scanning the shelves, so c is one more
             if(c==(tempBlue ? 2 : 1) && vuMark.toString().equals((tempBlue ? "LEFT" : "RIGHT"))){
                 setMotorP(0,0,0,0);
-                sleep(500)
-                setMotorP(.3,.3,.3,.3)
-                sleep(500)
-                setMotorP(0,0,0,0)
-                robot.leftGrabServo.setPosition(.422)
+                sleep(500);
+                setMotorP(.3,.3,.3,.3);
+                sleep(500);
+                setMotorP(0,0,0,0);
+                robot.leftGrabServo.setPosition(.422);
                 robot.rightGrabServo.setPosition(.731);
                 break;
             }
             
             else if(c==(tempBlue ? 3 : 2) && vuMark.toString().equals("CENTER")){
                 setMotorP(0,0,0,0);
-                sleep(500)
-                setMotorP(.3,.3,.3,.3)
-                sleep(500)
-                setMotorP(0,0,0,0)
+                sleep(500);
+                setMotorP(.3,.3,.3,.3);
+                sleep(500);
+                setMotorP(0,0,0,0);
                 break;
             }
             else if(c==(tempBlue ? 4 : 3) && vuMark.toString().equals((tempBlue ? "RIGHT" : "LEFT"))){
                 setMotorP(0,0,0,0);
-                sleep(500)
-                setMotorP(.3,.3,.3,.3)
-                sleep(500)
-                setMotorP(0,0,0,0)
+                sleep(500);
+                setMotorP(.3,.3,.3,.3);
+                sleep(500);
+                setMotorP(0,0,0,0);
                 break;
             }
             prevDistance = curDistance;
@@ -357,11 +357,11 @@ public class Auto extends LinearOpMode {
             }
             prevDistance = curDistance;
             idle();
-        }
+        } */
         telemetry.addData("Status", "Finished!");
         telemetry.update();
     }
-        */
+
 
     // Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
     private void reOrient(double power, double rf, double rb, double lf, double lb, boolean step, int targetHeading){

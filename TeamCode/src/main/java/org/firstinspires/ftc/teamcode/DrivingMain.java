@@ -95,7 +95,7 @@ public class DrivingMain extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         double rPos= .5;
         double lPos= .5;
-        gamepad1.setJoystickDeadzone(.2);
+        gamepad1.setJoystickDeadzone(.2f);
         while (opModeIsActive()) {
             double rfPower, rbPower, lfPower, lbPower;
             double xl = gamepad1.left_stick_x, yl = -gamepad1.left_stick_y; //moving thumbstick up results in -y value
