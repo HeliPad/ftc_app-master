@@ -34,7 +34,7 @@ package org.firstinspires.ftc.teamcode;
 
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 //import com.qualcomm.robotcore.util.Range;
 
@@ -51,8 +51,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="DrivingMain", group="Linear Opmode")
-public class DrivingMain extends LinearOpMode {
+@Autonomous(name="AutoOrient", group="Linear Opmode")
+public class AutoOrient extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -85,155 +85,38 @@ public class DrivingMain extends LinearOpMode {
 
         //Zero the heading
 
-        boolean[] pressed = new boolean[5];
-        boolean omniMode = false;
-        boolean grabbing = false;
-        boolean relicGrabbing = false;
-        boolean relicFlip = false;
-        double mod = 0.5;
-
         // run until the end of the match (driver presses STOP)
-        double rPos= .5;
-        double lPos= .5;
-        while (opModeIsActive()) {
-            double rfPower, rbPower, lfPower, lbPower;
-            double xl = gamepad1.left_stick_x, yl = -gamepad1.left_stick_y; //moving thumbstick up results in -y value
-            double xr = gamepad1.right_stick_x;
 
-            //toggles driving mode
-            if (gamepad1.a && !pressed[0]) {
-                omniMode = !omniMode;
-                pressed[0] = true;
-            } else if (!gamepad1.a) {
-                pressed[0] = false;
-            }
-            //Reorients Robot (see reOrient() for more info.)
-            if (gamepad1.y && !pressed[1]) {
-                reOrient();
-                pressed[1] = true;
-            } else if (!gamepad1.y) {
-                pressed[1] = false;
-            }
-
-            //Calculates the power to give each motor for the two driving modes based on thumbstick position
-            if (omniMode) {
-                rfPower = -xl + yl;
-                rbPower = xl + yl;
-                lfPower = xl + yl;
-                lbPower = -xl + yl;
-            }
-            else {
-                if(Math.abs(xl) >= Math.abs(yl)){ //if the thumbstick is facing more horizontally than vertically
-                    rfPower = -xl;
-                    rbPower = xl;
-                    lfPower = xl;
-                    lbPower = -xl;
-                }
-                else{
-                    rfPower = yl;
-                    rbPower = yl;
-                    lfPower = yl;
-                    lbPower = yl;
-                }
-            }
-
-            //Changes motors' power to account for turning
-            rfPower -= xr;
-            rbPower -= xr;
-            lfPower += xr;
-            lbPower += xr;
-
-            //Divides each motors' power by the highest power of the four motors to keep all powers within the setPower() method's parameters (-1<=power<=1)
-            // In turn though, it makes the power less variable (moved the thumbstick only a little bit up, instantly changed all motor powers to 1) <---Fixed
-            if(Math.abs(rfPower)>1 || Math.abs(rbPower)>1 || Math.abs(lfPower)>1 || Math.abs(lbPower)>1) {
-                double max = Math.max(Math.max(Math.max(Math.abs(rfPower), Math.abs(rbPower)), Math.abs(lfPower)), Math.abs(lbPower));
-                rfPower /= max;
-                rbPower /= max;
-                lfPower /= max;
-                lbPower /= max;
-            }
-
-            //For testing (looks fine)
-            telemetry.addData("Status", "Right F Motor: " + rfPower*mod);
-            telemetry.addData("Status", "Right B Motor: " + rbPower*mod);
-            telemetry.addData("Status", "Left F Motor: " + lfPower*mod);
-            telemetry.addData("Status", "Left B Motor: " + lbPower*mod);
-            telemetry.addData("Status", "Left Stick X: " + gamepad1.left_stick_x + "Y:" + gamepad1.left_stick_y);
-            telemetry.addData("Status", "Right Stick X: " + gamepad1.right_stick_x + "Y:" + gamepad1.right_stick_y);
-            telemetry.addData("Status", "Left B Motor: " + lbPower*mod);
+        robot.rightMotorB.setPower(-turnPower);
+        robot.rightMotorF.setPower(-turnPower);
+        robot.leftMotorF.setPower(turnPower);
+        robot.leftMotorB.setPower(turnPower);
+        while(opModeIsActive() && runtime.seconds() < 1){
             telemetry.addData("Status", "Gyro Heading: " + robot.gyro.getHeading());
-            telemetry.addData("Status", "OmniMode: " + (omniMode ? "On" : "Off"));
             telemetry.update();
-
-            robot.rightMotorF.setPower(rfPower*mod);
-            robot.rightMotorB.setPower(rbPower*mod);
-            robot.leftMotorF.setPower(lfPower*mod);
-            robot.leftMotorB.setPower(lbPower*mod);
-
-            robot.raiseMotor.setPower((gamepad2.dpad_up ? 1 : 0) - (gamepad2.dpad_down ? 1 : 0));
-
-            //open and close grabber
-            if (gamepad2.a && !pressed[2]) {
-                grabbing = !grabbing;
-                robot.leftGrabServo.setPosition(grabbing ? .808 : .422); //originally .472
-                robot.rightGrabServo.setPosition(grabbing ? .4806 : .731);
-                pressed[2] = true;
-            } else if (!gamepad2.a) {
-                pressed[2] = false;
-            }
-            
-            //open and close relic grabber
-            if (gamepad2.y && !pressed[3]) {
-                relicGrabbing = !relicGrabbing;
-                robot.relicServo.setPosition(relicGrabbing ? .8 : .5);
-                pressed[3] = true;
-            } else if (!gamepad2.y) {
-                pressed[3] = false;
-            }
-            
-            //toggle relic flip servo
-            if (gamepad2.x && !pressed[4]) {
-                relicGrabbing = !relicGrabbing;
-                robot.flipServo.setPosition(relicFlip ? .8 : .5);
-                pressed[4] = true;
-            } else if (!gamepad2.x) {
-                pressed[4] = false;
-            }
-            
-            double modifier=.01;
-            if(gamepad2.right_stick_x !=0){
-                rPos+=modifier*gamepad2.right_stick_x;
-                if(rPos<0){
-                    rPos=0;
-                }
-                else if(rPos>1){
-                    rPos=1;
-                }
-                robot.rightGrabServo.setPosition(rPos);
-
-            }
-            if(gamepad2.left_stick_x!=0){
-                lPos+=modifier*gamepad2.left_stick_x;
-                if(lPos<0){
-                    lPos=0;
-                }
-                else if(lPos>1){
-                    lPos=1;
-                }
-                robot.leftGrabServo.setPosition(lPos);
-            }
-            telemetry.addData("Status: ", "Left Grab Servo Position: " + lPos);
-            telemetry.addData("Status: ", "Right Grab Servo Position " + rPos);
-
-            //Moving glyph rack and pinion
-            robot.relicMotor.setPower(-gamepad2.right_stick_y/2);
-
             idle();
         }
+
+        robot.rightMotorB.setPower(0);
+        robot.rightMotorF.setPower(0);
+        robot.leftMotorF.setPower(0);
+        robot.leftMotorB.setPower(0);
+
+
+        sleep(1500);
+        reOrient();
+        sleep(3000);
+
+            //Calculates the power to give each motor for the two driving modes based on thumbstick position
+
+
+
+            //open and close grabber
+
     }
 
     //Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
-    private float turnPower = .1f;
+    private float turnPower = .08f;
     private void reOrient() {
         int curHeading = robot.gyro.getHeading();
         telemetry.addData("Heading", curHeading);
@@ -243,9 +126,12 @@ public class DrivingMain extends LinearOpMode {
         if(targetHeading==360){
             targetHeading=0;
         }
-
+        telemetry.addData("Status","Angle Difference" + angleDifference(targetHeading ,  robot.gyro.getHeading()));
+        telemetry.update();
+        sleep(2000);
         //Turns robot towards Target Heading (added last part just in case Cur==Target @ 0)
         //Multiplied target heading by 90 to allow all cases to work (if curHeading>targetHeading && targetHeading==1, then the robot would've moved CCW)
+
         if (angleDifference(targetHeading, curHeading) < 0) {//if(curHeading < (targetHeading == 0 ? 360 : targetHeading && curHeading != targetHeading)){ this will not always take the shortest route to the target
                 robot.rightMotorB.setPower(-turnPower); //test and set to power that'll ensure greatest accuracy:speed ratio
                 robot.rightMotorF.setPower(-turnPower);
@@ -267,12 +153,16 @@ public class DrivingMain extends LinearOpMode {
             telemetry.addData("Status", "Reorienting... Please Wait...");
             telemetry.update();
         }
+
         robot.rightMotorB.setPower(0);
         robot.rightMotorF.setPower(0);
         robot.leftMotorF.setPower(0);
         robot.leftMotorB.setPower(0);
-        telemetry.addData("Status","Done!");
+        sleep(1500);
+        curHeading = robot.gyro.getHeading();
+        telemetry.addData("Heading", curHeading);
         telemetry.update();
+        sleep(3000);
     }
 }
 //https://gist.github.com/jboulhous/6007980
