@@ -332,6 +332,7 @@ public class Auto extends LinearOpMode {
             idle();
         }
         // Move to 2nd slot and park (probably won't need this)
+        /*
         prevDistance = robot.range.getDistance(DistanceUnit.CM);
         c=0;
         double startTime = runtime.seconds();
@@ -360,6 +361,7 @@ public class Auto extends LinearOpMode {
         telemetry.addData("Status", "Finished!");
         telemetry.update();
     }
+        */
 
     // Reorients the Robot so it faces the shelves (or the nearest multiple of 90/ cardinal direction in relation to the initial header)
     private void reOrient(double power, double rf, double rb, double lf, double lb, boolean step, int targetHeading){

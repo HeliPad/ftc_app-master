@@ -71,7 +71,7 @@ public class DrivingMain extends LinearOpMode {
         robot.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
+        
         //Zero the heading
         telemetry.addData("Status", "Calibrating the Gyro, Don't Move...");
         telemetry.update();
@@ -95,10 +95,11 @@ public class DrivingMain extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         double rPos= .5;
         double lPos= .5;
+        gamepad1.setJoystickDeadzone(.2);
         while (opModeIsActive()) {
             double rfPower, rbPower, lfPower, lbPower;
             double xl = gamepad1.left_stick_x, yl = -gamepad1.left_stick_y; //moving thumbstick up results in -y value
-            double xr = gamepad1.right_stick_x;
+            double xr = gamepad1.right_stick_x;             
 
             //toggles driving mode
             if (gamepad1.a && !pressed[0]) {
@@ -282,5 +283,19 @@ git add .
 git commit -m "[Insert Commit Here]"
 
 git push -u origin master
+<<<<<<<<< saved version
+    }
+}
+//https://gist.github.com/jboulhous/6007980
+
+/*
+git add .
+git commit -m "[Insert Commit Here]"
+
+git push -u origin master
 //(curHeading > targetHeading + 1 || curHeading < (targetHeading==0 ? 359 : targetHeading - 1))
+=========
+git push -u origin master
+
+>>>>>>>>> local version
 */
