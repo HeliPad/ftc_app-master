@@ -87,6 +87,7 @@ public class Auto extends LinearOpMode {
     Hardware robot=new Hardware();
     private boolean isBlue=false;
     private boolean doTurn=false;
+    private boolean reverseScan = false;
     public Auto(boolean isBlue, boolean doTurn) {
         this.isBlue=isBlue;
         this.doTurn=doTurn;
@@ -146,6 +147,13 @@ public class Auto extends LinearOpMode {
         }
         telemetry.addData("Status", "Found image! Key is the " + vuMark + "!");
         telemetry.update();
+        
+        robot.leftGrabServo.setPosition(.808);
+        robot.rightGrabServo.setPosition(.4806);
+        
+        robot.raiseMotor.setPower(1);
+        sleep(500)
+        robot.raiseMotor.setPower(0);
 
         // Sets color sensor to active mode (for reading objects that aren't light sources) 
         robot.color.enableLed(true);
@@ -153,12 +161,11 @@ public class Auto extends LinearOpMode {
         robot.jSlapServo.setPosition(.4);
         robot.jDropServo.setPosition(.5);
         
-        sleep(200); // Gives servo time to stop
-
         // Color Sensor stuff:
         // Get the red and blue values from RGB
         red=robot.color.red();
         blue=robot.color.blue();
+        
         if(red>blue){
             // hit ball based on alliance
             
@@ -189,7 +196,7 @@ public class Auto extends LinearOpMode {
         }
         // drive off platform (Can use gyro's X or Y angular velocity to know how far to go) <-- when angular velocity == 0, stop motors
         if(doTurn){
-            setMotorP(1, 1, 1, 1);
+            setMotorP(.5, .5, .5, .5);
         }
         else if(!isBlue){
             setMotorP(.1, -.1, -.1, .1);
@@ -225,7 +232,6 @@ public class Auto extends LinearOpMode {
             }
         }
         else{
-            setMotorP(.5, .5, .5, .5);
             while(robot.range.getDistance(DistanceUnit.CM) > 15){
                 telemetry.addData("Status:" , "Moving towards shelves...");
                 telemetry.update();
@@ -249,6 +255,7 @@ public class Auto extends LinearOpMode {
                 // Adds two seconds if it finds a shelf 
                 if(curDist<=prevDist - 7){
                     startTime=(int)runtime.seconds();
+                    reverseScan = true;
                 }
                 prevDist=curDist;
             }
@@ -270,13 +277,20 @@ public class Auto extends LinearOpMode {
         // Range sensor goes on the rightmost point of the robot
         double prevDistance = robot.range.getDistance(DistanceUnit.CM);
         double curDistance;
+        boolean tempBlue = isBlue;
         int c=0; // # of times robot passes shelf edge
         int curHeading;
+        //reconfigures code applied to scan if robot went past shelves
+        
+        if(reverseScan){
+            tempBlue=!tempBlue;
+        }
         while(opModeIsActive()){
             curDistance = robot.range.getDistance(DistanceUnit.CM);
-            // Reorient code goes here:
+            // Call reOrient
             curHeading = robot.gyro.getHeading();
-
+            //Finds the difference between robot's current heading and the target heading
+            //then calls reOrient to move robot back to target heading
             if (Math.abs(angleDifference((doTurn ? (isBlue ? 270:90) : 0), curHeading)) > 1){
                 reOrient(.05, .1, -.1, -.1, .1, true, (doTurn ? (isBlue ? 270:90) : 0));
             }
@@ -284,32 +298,40 @@ public class Auto extends LinearOpMode {
             if(curDistance<prevDistance - 7){
                 c++;
             }
-
-            if(c==(isBlue ? 2 : 1) && vuMark.toString().equals((isBlue ? "LEFT" : "RIGHT"))){
+            
+            //Finds where the key glyph slot is and stops
+            //tempBlue: the robot goes from left to right when scanning the shelves, so c is one more
+            if(c==(tempBlue ? 2 : 1) && vuMark.toString().equals((tempBlue ? "LEFT" : "RIGHT"))){
                 setMotorP(0,0,0,0);
-
-                // Plack blocku
-
+                sleep(500)
+                setMotorP(.3,.3,.3,.3)
+                sleep(500)
+                setMotorP(0,0,0,0)
+                robot.leftGrabServo.setPosition(.422)
+                robot.rightGrabServo.setPosition(.731);
                 break;
             }
             
-            else if(c==(isBlue ? 3 : 2) && vuMark.toString().equals("CENTER")){
+            else if(c==(tempBlue ? 3 : 2) && vuMark.toString().equals("CENTER")){
                 setMotorP(0,0,0,0);
-                // Place blocku
-
+                sleep(500)
+                setMotorP(.3,.3,.3,.3)
+                sleep(500)
+                setMotorP(0,0,0,0)
                 break;
             }
-            else if(c==(isBlue ? 4 : 3) && vuMark.toString().equals((isBlue ? "RIGHT" : "LEFT"))){
+            else if(c==(tempBlue ? 4 : 3) && vuMark.toString().equals((tempBlue ? "RIGHT" : "LEFT"))){
                 setMotorP(0,0,0,0);
-
-                // Place blocku
-                
+                sleep(500)
+                setMotorP(.3,.3,.3,.3)
+                sleep(500)
+                setMotorP(0,0,0,0)
                 break;
             }
             prevDistance = curDistance;
             idle();
         }
-        // Move to 2nd slot and park
+        // Move to 2nd slot and park (probably won't need this)
         prevDistance = robot.range.getDistance(DistanceUnit.CM);
         c=0;
         double startTime = runtime.seconds();
