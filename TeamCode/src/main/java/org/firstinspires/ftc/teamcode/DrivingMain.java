@@ -172,6 +172,7 @@ public class DrivingMain extends LinearOpMode {
             robot.leftMotorB.setPower(lbPower*mod);
 
             robot.raiseMotor.setPower((gamepad2.dpad_up ? 1 : 0) - (gamepad2.dpad_down ? 1 : 0));
+            robot.relicMotor.setPower((gamepad2.right_bumper ? 1 : 0) - (gamepad2.left_bumper ? 1 : 0));
 
             //open and close grabber
             if (gamepad2.a && !pressed[2]) {
