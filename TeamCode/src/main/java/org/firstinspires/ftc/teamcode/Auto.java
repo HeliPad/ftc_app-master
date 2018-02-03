@@ -157,7 +157,30 @@ public class Auto extends LinearOpMode {
 
         // Sets color sensor to active mode (for reading objects that aren't light sources) 
         robot.color.enableLed(true);
-        //turn on servo that drops bar (test for optimal positions)
+        //turn on servo that drops bar (several stages)
+        /*
+        Initial:
+        jDrop: .9464
+        jSlap: .2234
+
+        Stage 1:
+        jDrop: .7341
+        jSlap: Same
+
+        Stage 2:
+        jDrop: Same
+        jSlap: .3736
+
+        Stage 3:
+        jDrop: .1157
+        jSlap: Same
+
+        Stage 4:
+        jDrop: .08837
+        jSLap: .6299
+
+
+        */
         robot.jSlapServo.setPosition(.4);
         robot.jDropServo.setPosition(.5);
         
@@ -171,18 +194,27 @@ public class Auto extends LinearOpMode {
             
             if(isBlue){
                 //Hit ball facing Color Sensor
+                reOrient(.1, 0, 0, 0, 0, false, 30);
+                reOrient(.1,0,0,0,0,false,0);
+
             }
             else{
                 //hit ball opposing Color Sensor
+                reOrient(.1, 0, 0, 0, 0, false, 330);
+                reOrient(.1,0,0,0,0,false,0);
             }
         }
         else if(blue>red){
             // hit ball based on alliance
             if(isBlue){
                 //Hit ball opposing Color Sensor
+                reOrient(.1, 0, 0, 0, 0, false, 330);
+                reOrient(.1,0,0,0,0,false,0);
             }
             else{
                 //Hit ball facing Color Sensor
+                reOrient(.1, 0, 0, 0, 0, false, 30);
+                reOrient(.1,0,0,0,0,false,0);
             }
         }
         
@@ -291,9 +323,9 @@ public class Auto extends LinearOpMode {
             curHeading = robot.gyro.getHeading();
             //Finds the difference between robot's current heading and the target heading
             //then calls reOrient to move robot back to target heading
-            if (Math.abs(angleDifference((doTurn ? (isBlue ? 270:90) : 0), curHeading)) > 1){
+            /*if (Math.abs(angleDifference((doTurn ? (isBlue ? 270:90) : 0), curHeading)) > 1){
                 reOrient(.05, .1, -.1, -.1, .1, true, (doTurn ? (isBlue ? 270:90) : 0));
-            }
+            }*/
 
             if(curDistance<prevDistance - 7){
                 c++;
@@ -368,14 +400,15 @@ public class Auto extends LinearOpMode {
         int curHeading = robot.gyro.getHeading();
 
         // Turns robot towards Target Heading
+        double tRF = 0, tRB = 0, tLF = 0, tLB = 0;
         if(curHeading!=targetHeading){
             if(curHeading > 180){
-                setMotorP(power + rf, power + rb, -power + lf, -power + lb); //test and set to power that'll ensure greatest accuracy:speed ratio
-
+                tRF = power + rf; tRB = power + rb; tLF = -power + lf; tLB = -power + lb;
+                setMotorP(tRF, tRB, tLF, tLB); //test and set to power that'll ensure greatest accuracy:speed ratio
             }
-            else{
-                setMotorP(-power + rf, -power + rb, power + lf, power + lb); //test and set to power that'll ensure greatest accuracy:speed ratio
-
+            else {
+                tRF = -power + rf; tRB = -power + rb; tLF = power + lf; tLB = power + lb;
+                setMotorP(tRF, tRB, tLF, tLB); //test and set to power that'll ensure greatest accuracy:speed ratio
             }
         }
         curHeading = robot.gyro.getHeading();
@@ -386,11 +419,24 @@ public class Auto extends LinearOpMode {
         }
         else{
             // when the loop breaks, the robot is at the targetHeading
-            while (curHeading != targetHeading)
+            double lastTime = runtime.seconds();
+            boolean itsGoin = true;
+            while (Math.abs(angleDifference(targetHeading, curHeading)) > 3)
             {
                 curHeading = robot.gyro.getHeading();
                 telemetry.addData("Status", "Reorienting... Please Wait...");
                 telemetry.update();
+
+                if (runtime.seconds() - lastTime >= 0.25) {
+                    itsGoin = !itsGoin;
+                    if (itsGoin) {
+                        setMotorP(tRF, tRB, tLF, tLB);
+                    }
+                    else {
+                        setMotorP(0, 0, 0, 0);
+                    }
+                    lastTime = runtime.seconds();
+                }
             }
         }
         setMotorP(rf, rb, lf, lb);

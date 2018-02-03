@@ -210,7 +210,7 @@ public class DrivingMain extends LinearOpMode {
                 else if(rPos>1){
                     rPos=1;
                 }
-                robot.rightGrabServo.setPosition(rPos);
+                robot.jDropServo.setPosition(rPos);
 
             }
             if(gamepad2.left_stick_x!=0){
@@ -221,7 +221,7 @@ public class DrivingMain extends LinearOpMode {
                 else if(lPos>1){
                     lPos=1;
                 }
-                robot.leftGrabServo.setPosition(lPos);
+                robot.jSlapServo.setPosition(lPos);
             }
             telemetry.addData("Status: ", "Left Grab Servo Position: " + lPos);
             telemetry.addData("Status: ", "Right Grab Servo Position " + rPos);
@@ -261,7 +261,7 @@ public class DrivingMain extends LinearOpMode {
         }
         //when the loop breaks, the robot is at the targetHeading
         curHeading = robot.gyro.getHeading();
-        while (Math.abs(angleDifference(targetHeading, curHeading)) > 5)
+        while (Math.abs(angleDifference(targetHeading, curHeading)) > 3)
         {
             curHeading = robot.gyro.getHeading();
             telemetry.addData("Status", "Gyro Heading: " + curHeading);
