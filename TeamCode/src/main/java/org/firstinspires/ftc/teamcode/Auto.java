@@ -181,8 +181,18 @@ public class Auto extends LinearOpMode {
 
 
         */
-        robot.jSlapServo.setPosition(.4);
-        robot.jDropServo.setPosition(.5);
+        robot.jDropServo.setPosition(.7341);
+        robot.jSlapServo.setPosition(.2234);
+        sleep(200);
+        robot.jDropServo.setPosition(.7341);
+        robot.jSlapServo.setPosition(.3736);
+        sleep(200);
+        robot.jDropServo.setPosition(.1157);
+        robot.jSlapServo.setPosition(.3736);
+        sleep(200);
+        robot.jDropServo.setPosition(..08837);
+        robot.jSlapServo.setPosition(.6299);
+        sleep(200);
         
         // Color Sensor stuff:
         // Get the red and blue values from RGB
@@ -219,9 +229,21 @@ public class Auto extends LinearOpMode {
         }
         
         // Retract servo
-        robot.jDropServo.setPosition(.7103);
-        robot.jSlapServo.setPosition(.2671);
-        sleep(200); //gives time for servo to retract
+        robot.jDropServo.setPosition(.1157);
+        robot.jSlapServo.setPosition(.3736);
+        sleep(200);
+        
+        robot.jDropServo.setPosition(.7341);
+        robot.jSlapServo.setPosition(.3736);
+        sleep(200);
+        
+        robot.jDropServo.setPosition(.7341);
+        robot.jSlapServo.setPosition(.2234);
+        sleep(200);
+        
+        robot.jDropServo.setPosition(.9464);
+        robot.jSlapServo.setPosition(.2234);
+        
         // Turn robot if class that calls object is R2 or B2
         if(doTurn){
             reOrient(.5,0,0,0,0, false, (isBlue ? 270 : 90));
